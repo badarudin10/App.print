@@ -134,16 +134,28 @@
                 </div>
             </div>
             
-            <div class="flex items-center space-x-3">
-                <button onclick="toggleLiveClock()" id="btnLiveClock" class="px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Status & Tombol Bluetooth -->
+                <button onclick="toggleBluetoothConnection()" id="btnBluetooth" class="px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-bluetooth text-blue-400" id="iconBt"></i> 
+                    <span id="textBtStatus">Hubungkan Bluetooth</span>
+                </button>
+
+                <button onclick="toggleLiveClock()" id="btnLiveClock" class="hidden sm:flex px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition items-center gap-1.5">
                     <i class="fa-regular fa-clock text-amber-400"></i> <span id="clockStatusText">Jam Live: ON</span>
                 </button>
-                <button onclick="triggerPrint()" class="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-lg transition shadow-lg shadow-red-600/30 flex items-center gap-2 transform active:scale-95">
-                    <i class="fa-solid fa-print text-sm"></i> Cetak Struk
+                <button onclick="triggerPrint()" class="px-4 py-2 text-xs font-bold text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition flex items-center gap-2 transform active:scale-95" title="Cetak Browser / System Print Dialog">
+                    <i class="fa-solid fa-desktop text-sm"></i> <span class="hidden sm:inline">Cetak System</span>
                 </button>
             </div>
         </div>
     </header>
+
+    <!-- Banner Info Status Bluetooth -->
+    <div id="btStatusBar" class="no-print bg-slate-950 border-b border-slate-800 px-4 py-2 text-xs text-center text-slate-400 flex items-center justify-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-slate-500" id="btDot"></span>
+        <span id="btBarText">Status Bluetooth: Belum terhubung ke printer.</span>
+    </div>
 
     <!-- Main Workspace -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -378,9 +390,12 @@
                     </div>
 
                     <!-- Action Control Mobile/Desktop -->
-                    <div class="w-full mt-6 no-print flex flex-col items-center gap-2">
-                        <button onclick="triggerPrint()" class="w-[290px] py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl shadow-lg shadow-red-600/30 transition flex items-center justify-center gap-2 text-sm transform active:scale-95">
-                            <i class="fa-solid fa-print"></i> Cetak Struk Thermal 58mm
+                    <div class="w-full mt-6 no-print flex flex-col items-center gap-3">
+                        <button onclick="printViaBluetooth()" class="w-[290px] py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2 text-sm transform active:scale-95">
+                            <i class="fa-solid fa-bluetooth text-base"></i> Cetak via Bluetooth (Thermal 58mm)
+                        </button>
+                        <button onclick="triggerPrint()" class="w-[290px] py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl border border-slate-700 transition flex items-center justify-center gap-2 text-xs">
+                            <i class="fa-solid fa-print"></i> Cetak via System Window / PDF
                         </button>
                     </div>
 
@@ -396,7 +411,22 @@
         let isLiveClockActive = true;
         let clockInterval = null;
 
-        // Formatter Angka dengan Koma (Sesuai Format Struk Thermal Foto)
+        // variabel Global Web Bluetooth
+        let bluetoothDevice = null;
+        let gattServer = null;
+        let printCharacteristic = null;
+
+        // UUID Service Bluetooth Thermal Printer Komersial (SPP / Thermal Print Services)
+        const PRINTER_SERVICES = [
+            '000018f0-0000-1000-8000-00805f9b34fb',
+            '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+            'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+            '0000af00-0000-1000-8000-00805f9b34fb',
+            '0000e025-0000-1000-8000-00805f9b34fb',
+            '0000ff00-0000-1000-8000-00805f9b34fb'
+        ];
+
+        // Formatter Angka dengan Koma (Sesuai Format Struk Thermal)
         function formatNumber(num) {
             return new Intl.NumberFormat('en-US').format(num);
         }
@@ -571,7 +601,7 @@
             }
         }
 
-        // Trigger Cetak Struk dengan Animasi Keluar Kertas
+        // Trigger Cetak Struk Windows/System
         function triggerPrint() {
             const paper = document.getElementById('print-section');
             paper.classList.remove('printing-animation');
@@ -581,6 +611,248 @@
             setTimeout(() => {
                 window.print();
             }, 300);
+        }
+
+        // =========================================================================
+        // LOGIKA WEB BLUETOOTH PRINTER THERMAL (ESC/POS COMMANDS 58MM)
+        // =========================================================================
+
+        // Update UI Status Bluetooth
+        function updateBtUI(isConnected, name = '') {
+            const btBtn = document.getElementById('textBtStatus');
+            const iconBt = document.getElementById('iconBt');
+            const btDot = document.getElementById('btDot');
+            const btBarText = document.getElementById('btBarText');
+
+            if (isConnected) {
+                btBtn.innerText = `Terhubung: ${name}`;
+                iconBt.className = "fa-solid fa-bluetooth text-emerald-400";
+                btDot.className = "w-2 h-2 rounded-full bg-emerald-500 pulse-live";
+                btBarText.innerHTML = `Status Bluetooth: Terhubung ke <b class="text-emerald-400">${name}</b>`;
+            } else {
+                btBtn.innerText = "Hubungkan Bluetooth";
+                iconBt.className = "fa-solid fa-bluetooth text-blue-400";
+                btDot.className = "w-2 h-2 rounded-full bg-slate-500";
+                btBarText.innerText = "Status Bluetooth: Belum terhubung ke printer.";
+            }
+        }
+
+        // Hubungkan / Putuskan Printer Bluetooth
+        async function toggleBluetoothConnection() {
+            if (!('bluetooth' in navigator)) {
+                alert('Browser Anda tidak mendukung Web Bluetooth API. Gunakan Chrome/Edge di Android/PC.');
+                return;
+            }
+
+            if (bluetoothDevice && bluetoothDevice.gatt.connected) {
+                bluetoothDevice.gatt.disconnect();
+                return;
+            }
+
+            try {
+                document.getElementById('btBarText').innerText = "Status Bluetooth: Mencari perangkat printer thermal...";
+                
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: PRINTER_SERVICES
+                });
+
+                bluetoothDevice.addEventListener('gattserverdisconnected', onDisconnected);
+
+                document.getElementById('btBarText').innerText = `Status Bluetooth: Menghubungkan ke ${bluetoothDevice.name || 'Printer'}...`;
+                gattServer = await bluetoothDevice.gatt.connect();
+
+                // Cari service pencetakan yang cocok
+                let service = null;
+                for (const serviceUuid of PRINTER_SERVICES) {
+                    try {
+                        service = await gattServer.getPrimaryService(serviceUuid);
+                        if (service) break;
+                    } catch (e) {
+                        // Lanjut cari service berikutnya
+                    }
+                }
+
+                if (!service) {
+                    const services = await gattServer.getPrimaryServices();
+                    if (services.length > 0) service = services[0];
+                }
+
+                if (!service) throw new Error("Gagal menemukan Service Printer Bluetooth yang cocok.");
+
+                // Cari Karakteristik untuk Menulis Data
+                const characteristics = await service.getCharacteristics();
+                for (const char of characteristics) {
+                    if (char.properties.write || char.properties.writeWithoutResponse) {
+                        printCharacteristic = char;
+                        break;
+                    }
+                }
+
+                if (!printCharacteristic) throw new Error("Karakteristik menulis tidak ditemukan pada printer.");
+
+                updateBtUI(true, bluetoothDevice.name || 'Thermal Printer');
+
+            } catch (err) {
+                console.error("Bluetooth Connection Error:", err);
+                document.getElementById('btBarText').innerText = `Status Bluetooth: ${err.message || 'Gagal terhubung'}`;
+                updateBtUI(false);
+            }
+        }
+
+        function onDisconnected() {
+            updateBtUI(false);
+            printCharacteristic = null;
+            gattServer = null;
+        }
+
+        // Format Baris Teks ESC/POS Kiri - Kanan (58mm = Max 32 Karakter per baris)
+        function formatEscPosRow(left, right, maxLen = 32) {
+            left = String(left);
+            right = String(right);
+            const totalSpaces = maxLen - left.length - right.length;
+            if (totalSpaces < 1) {
+                return left + ' ' + right + '\n';
+            }
+            return left + ' '.repeat(totalSpaces) + right + '\n';
+        }
+
+        // Generate Perintah Biner ESC/POS dari Data Struk (58mm)
+        function generateEscPosCommands() {
+            const encoder = new TextEncoder();
+            let commands = [];
+
+            // Helper push command bytes
+            const push = (arr) => commands.push(...arr);
+            const pushStr = (str) => commands.push(...encoder.encode(str));
+
+            // Init ESC/POS Printer (ESC @)
+            push([0x1B, 0x40]);
+
+            // Set Center Alignment (ESC a 1)
+            push([0x1B, 0x61, 0x01]);
+
+            // Mode Bold ON (ESC E 1)
+            push([0x1B, 0x45, 0x01]);
+            pushStr("PERTAMINA\n");
+            
+            // Mode Bold OFF
+            push([0x1B, 0x45, 0x00]);
+
+            const kodeSpbu = document.getElementById('inputKodeSpbu').value || '-';
+            const namaSpbu = document.getElementById('inputNamaSpbu').value || '-';
+            const alamatSpbu = document.getElementById('inputAlamatSpbu').value || '-';
+
+            pushStr(`${kodeSpbu}\n`);
+            pushStr(`${namaSpbu.toUpperCase()}\n`);
+            pushStr(`${alamatSpbu}\n`);
+
+            // Left Alignment (ESC a 0)
+            push([0x1B, 0x61, 0x00]);
+
+            const shift = document.getElementById('inputShift').value || '1';
+            const noTrans = document.getElementById('inputNoTrans').value || '-';
+            const waktu = document.getElementById('inputWaktu').value || '-';
+
+            pushStr(formatEscPosRow(`Shift: ${shift}`, `No.Trans: ${noTrans}`));
+            pushStr(`Waktu: ${waktu}\n`);
+
+            // Garis Pembatas
+            pushStr("--------------------------------\n");
+
+            const pompa = document.getElementById('inputPompa').value || '1';
+            const produkSelect = document.getElementById('selectProduk');
+            const produk = produkSelect.value;
+            const harga = formatNumber(parseFloat(document.getElementById('inputHarga').value) || 0);
+            const volume = document.getElementById('inputVolume').value || '0';
+            const totalBayar = formatNumber(parseFloat(document.getElementById('inputTotalBayar').value) || 0);
+            const operator = (document.getElementById('inputOperator').value || '-').toUpperCase();
+
+            pushStr(formatEscPosRow("Pulau/Pompa", `: ${pompa}`));
+            pushStr(formatEscPosRow("Nama Produk", `: ${produk}`));
+            pushStr(formatEscPosRow("Harga/Liter", `: Rp. ${harga}`));
+            pushStr(formatEscPosRow("Volume", `: (L) ${volume}`));
+
+            // Total Bold
+            push([0x1B, 0x45, 0x01]);
+            pushStr(formatEscPosRow("Total Harga", `: Rp. ${totalBayar}`));
+            push([0x1B, 0x45, 0x00]);
+
+            pushStr(formatEscPosRow("Operator", `: ${operator}`));
+
+            // Render Daftar Voucher jika ada
+            const voucherCodes = document.querySelectorAll('.voucher-code');
+            const voucherAmounts = document.querySelectorAll('.voucher-amount');
+            let hasVoucher = false;
+
+            voucherCodes.forEach((inputCode, index) => {
+                const code = inputCode.value.trim();
+                const amt = parseFloat(voucherAmounts[index].value) || 0;
+
+                if (code !== '' || amt > 0) {
+                    if (!hasVoucher) {
+                        pushStr("--------------------------------\n");
+                        hasVoucher = true;
+                    }
+                    pushStr(`VOUCHER ${code.toUpperCase()}\n`);
+                    pushStr(formatEscPosRow("", formatNumber(amt)));
+                }
+            });
+
+            // Garis Pembatas Footer
+            pushStr("--------------------------------\n");
+
+            // Center Footer
+            push([0x1B, 0x61, 0x01]);
+            pushStr("Terima Kasih telah menggunakan\n");
+            pushStr("produk Pertamina Dex, Gunakan\n");
+            pushStr("MyPertamina untuk menikmati\n");
+            pushStr("berbagai promo menarik lainnya.\n");
+
+            // Feed Paper (Feed 4 lines)
+            push([0x1B, 0x64, 0x04]);
+
+            return new Uint8Array(commands);
+        }
+
+        // Kirim Data Chunk ke Printer via Bluetooth
+        async function printViaBluetooth() {
+            if (!bluetoothDevice || !bluetoothDevice.gatt.connected || !printCharacteristic) {
+                // Jika belum konek, pancing dialog bluetooth terlebih dahulu
+                await toggleBluetoothConnection();
+                if (!bluetoothDevice || !bluetoothDevice.gatt.connected || !printCharacteristic) return;
+            }
+
+            try {
+                // Animasi visual kertas keluar
+                const paper = document.getElementById('print-section');
+                paper.classList.remove('printing-animation');
+                void paper.offsetWidth;
+                paper.classList.add('printing-animation');
+
+                document.getElementById('btBarText').innerText = "Status Bluetooth: Mengirim data ke printer...";
+
+                const data = generateEscPosCommands();
+                const CHUNK_SIZE = 100; // Chunk data 100 bytes agar aman di buffer BLE printer
+
+                for (let i = 0; i < data.length; i += CHUNK_SIZE) {
+                    const chunk = data.slice(i, i + CHUNK_SIZE);
+                    if (printCharacteristic.properties.writeWithoutResponse) {
+                        await printCharacteristic.writeValueWithoutResponse(chunk);
+                    } else {
+                        await printCharacteristic.writeValue(chunk);
+                    }
+                    // Delay 30ms antar chunk
+                    await new Promise(resolve => setTimeout(resolve, 30));
+                }
+
+                document.getElementById('btBarText').innerHTML = `Status Bluetooth: <span class="text-emerald-400 font-bold">Struk Berhasil Dicetak!</span>`;
+
+            } catch (err) {
+                console.error("Print Error:", err);
+                alert("Gagal mencetak struk via Bluetooth: " + err.message);
+                document.getElementById('btBarText').innerText = `Status Bluetooth: Gagal cetak (${err.message})`;
+            }
         }
 
         // Initialize Application
@@ -623,3 +895,4 @@
     </script>
 </body>
 </html>
+```
