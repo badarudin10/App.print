@@ -146,9 +146,6 @@
                     <span id="textBtStatus">Hubungkan Bluetooth</span>
                 </button>
 
-                <button onclick="toggleLiveClock()" id="btnLiveClock" class="hidden sm:flex px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition items-center gap-1.5">
-                    <i class="fa-regular fa-clock text-amber-400"></i> <span id="clockStatusText">Jam Live: ON</span>
-                </button>
                 <button onclick="triggerPrint()" class="px-4 py-2 text-xs font-bold text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition flex items-center gap-2 transform active:scale-95" title="Cetak Browser / System Print Dialog">
                     <i class="fa-solid fa-desktop text-sm"></i> <span class="hidden sm:inline">Cetak System</span>
                 </button>
@@ -210,8 +207,14 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Waktu Transaksi</label>
-                            <input type="text" id="inputWaktu" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-xs font-medium text-slate-400">Waktu Transaksi</label>
+                                <!-- Toggle Mode Waktu -->
+                                <button onclick="toggleTimeMode()" id="btnTimeMode" class="text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold transition flex items-center gap-1">
+                                    <i class="fa-solid fa-bolt" id="timeModeIcon"></i> <span id="timeModeText">Live: ON</span>
+                                </button>
+                            </div>
+                            <input type="text" id="inputWaktu" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" placeholder="DD/MM/YYYY HH:MM:SS">
                         </div>
                     </div>
                 </div>
@@ -290,7 +293,6 @@
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Kalimat Footer Struk:</label>
                         <textarea id="inputFooterText" rows="3" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition">Terima Kasih telah menggunakan produk Pertamax, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</textarea>
-                        <p class="text-[11px] text-slate-500 mt-1">Anda bisa mengubah kalimat di atas kapan saja sesuai jenis produk atau ketentuan SPBU Anda.</p>
                     </div>
                 </div>
 
@@ -310,7 +312,7 @@
                     </div>
 
                     <div id="voucherContainer" class="space-y-2.5">
-                        <!-- Voucher rows will be inserted here dynamically -->
+                        <!-- Voucher rows inserted dynamically -->
                     </div>
                 </div>
 
@@ -435,7 +437,6 @@
         let gattServer = null;
         let printCharacteristic = null;
 
-        // UUID Service Bluetooth Thermal Printer Komersial
         const PRINTER_SERVICES = [
             '000018f0-0000-1000-8000-00805f9b34fb',
             '49535343-fe7d-4ae5-8fa9-9fafd205e455',
@@ -445,21 +446,31 @@
             '0000ff00-0000-1000-8000-00805f9b34fb'
         ];
 
-        // Formatter Angka dengan Koma
         function formatNumber(num) {
             return new Intl.NumberFormat('en-US').format(num);
         }
 
-        // Clock Toggle Logic
-        function toggleLiveClock() {
+        // TOGGLE MODE WAKTU (LIVE / MANUAL)
+        function toggleTimeMode() {
             isLiveClockActive = !isLiveClockActive;
-            const btnText = document.getElementById('clockStatusText');
+            const btn = document.getElementById('btnTimeMode');
+            const icon = document.getElementById('timeModeIcon');
+            const text = document.getElementById('timeModeText');
+            const inputWaktu = document.getElementById('inputWaktu');
+
             if (isLiveClockActive) {
-                btnText.innerText = "Jam Live: ON";
+                btn.className = "text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold transition flex items-center gap-1";
+                icon.className = "fa-solid fa-bolt";
+                text.innerText = "Live: ON";
+                inputWaktu.readOnly = false; // Boleh diketik atau otomatis
                 startClock();
             } else {
-                btnText.innerText = "Jam Live: OFF";
+                btn.className = "text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded font-semibold transition flex items-center gap-1";
+                icon.className = "fa-solid fa-hand";
+                text.innerText = "Manual: OFF";
                 clearInterval(clockInterval);
+                inputWaktu.readOnly = false; // Bebas diketik manual
+                inputWaktu.focus();
             }
         }
 
@@ -474,6 +485,7 @@
         }
 
         function updateClock() {
+            if (!isLiveClockActive) return;
             const now = new Date();
             const day = String(now.getDate()).padStart(2, '0');
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -576,7 +588,6 @@
             const produkVal = produkSelect.value;
             document.getElementById('viewProduk').innerText = produkVal;
 
-            // AMBIL TEKS FOOTER DARI KOLOM INPUT
             const footerTextVal = document.getElementById('inputFooterText').value || '';
             document.getElementById('viewFooterText').innerText = footerTextVal;
 
@@ -591,7 +602,7 @@
 
             document.getElementById('viewOperator').innerText = (document.getElementById('inputOperator').value || '-').toUpperCase();
 
-            // Render Voucher List di Struk (Sejajar Kiri-Kanan)
+            // Render Voucher List (Sejajar Kiri-Kanan)
             const voucherCodes = document.querySelectorAll('.voucher-code');
             const voucherAmounts = document.querySelectorAll('.voucher-amount');
             const voucherWrapper = document.getElementById('viewVoucherWrapper');
@@ -627,7 +638,7 @@
         function triggerPrint() {
             const paper = document.getElementById('print-section');
             paper.classList.remove('printing-animation');
-            void paper.offsetWidth; // Trigger reflow
+            void paper.offsetWidth; 
             paper.classList.add('printing-animation');
 
             setTimeout(() => {
@@ -729,7 +740,6 @@
             return left + ' '.repeat(totalSpaces) + right + '\n';
         }
 
-        // Fungsi Memecah Teks Panjang Menjadi Baris Per 32 Karakter untuk Printer Thermal
         function wrapTextToWidth(text, maxLen = 32) {
             const words = text.split(' ');
             let lines = [];
@@ -817,14 +827,12 @@
                         pushStr("--------------------------------\n");
                         hasVoucher = true;
                     }
-                    // Cetak Kode Voucher di kiri dan Nominal di kanan dalam satu baris sejajar
                     pushStr(formatEscPosRow(code.toUpperCase(), amt));
                 }
             });
 
             pushStr("--------------------------------\n");
 
-            // Footer Text Dinamis dari Input Textarea (Centered)
             const customFooterText = document.getElementById('inputFooterText').value || '';
             const wrappedFooterLines = wrapTextToWidth(customFooterText, 32);
 
@@ -904,8 +912,9 @@
             });
 
             document.getElementById('inputFooterText').addEventListener('input', updatePreview);
+            document.getElementById('inputWaktu').addEventListener('input', updatePreview);
 
-            const inputs = ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputWaktu', 'inputPompa', 'inputOperator'];
+            const inputs = ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputPompa', 'inputOperator'];
             inputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', updatePreview);
             });
@@ -915,4 +924,3 @@
     </script>
 </body>
 </html>
-
