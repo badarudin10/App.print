@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cetak Struk SPBU Pertamina + Voucher</title>
+<style>
+* { box-sizing: border-box; }
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: #eef2f6;
+margin: 0;
+padding: 20px;
+color: #333;
+}
+​.app-container {
+max-width: 1000px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 25px;
+}
+​.card {
+background: #ffffff;
+padding: 22px;
+border-radius: 12px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+​h2 {
+margin-top: 0;
+font-size: 1.2rem;
+color: #0f172a;
+border-bottom: 2px solid #e2e8f0;
+padding-bottom: 10px;
+margin-bottom: 15px;
+}
+​.form-group {
+margin-bottom: 12px;
+}
+​.form-row {
+display: flex;
+gap: 10px;
+}
+​.form-row .form-group {
+flex: 1;
+}
+​label {
+display: block;
+font-size: 0.8rem;
+font-weight: 600;
+color: #475569;
+margin-bottom: 4px;
+}
+​input, select {
+width: 100%;
+padding: 8px 10px;
+border: 1px solid #cbd5e1;
+border-radius: 6px;
+font-size: 0.88rem;
+outline: none;
+transition: border-color 0.2s;
+}
+​input:focus, select:focus {
+border-color: #0284c7;
+}
+​.voucher-section {
+background: #f8fafc;
+padding: 12px;
+border: 1px dashed #cbd5e1;
+border-radius: 8px;
+margin-top: 15px;
+}
+​.voucher-item {
+display: flex;
+gap: 8px;
+margin-bottom: 8px;
+align-items: center;
+}
+​.btn-add {
+background: #10b981;
+color: white;
+border: none;
+padding: 6px 12px;
+border-radius: 5px;
+font-size: 0.8rem;
+font-weight: bold;
+cursor: pointer;
+margin-top: 5px;
+}
+​.btn-remove {
+background: #ef4444;
+color: white;
+border: none;
+padding: 8px 10px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 0.8rem;
+}
+​.btn-print {
+width: 100%;
+padding: 14px;
+background: #0284c7;
+color: white;
+border: none;
+border-radius: 8px;
+font-weight: bold;
+font-size: 1rem;
+cursor: pointer;
+margin-top: 20px;
+box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+}
+​.btn-print:hover { background: #0369a1; }
+​/* Area Struk Thermal Preview */
+.receipt-wrapper {
+display: flex;
+justify-content: center;
+align-items: flex-start;
+background: #d1d5db;
+padding: 20px;
+border-radius: 12px;
+}
+​.receipt {
+width: 58mm;
+background: #fff;
+padding: 15px 10px;
+font-family: 'Courier New', Courier, monospace;
+font-size: 11.5px;
+line-height: 1.25;
+color: #000;
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+letter-spacing: -0.2px;
+}
+​.logo-container {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+margin-bottom: 4px;
+}
+​.logo-text {
+font-weight: 900;
+font-size: 15px;
+font-family: Arial, sans-serif;
+letter-spacing: 0.5px;
+}
+​.text-center { text-align: center; }
+.text-right { text-align: right; }
+​.dashed-line {
+border-bottom: 1px dashed #000;
+margin: 6px 0;
+}
+​.flex-space {
+display: flex;
+justify-content: space-between;
+}
+​.voucher-row-code {
+margin-top: 4px;
+}
+​.voucher-row-val {
+text-align: right;
+margin-bottom: 4px;
+}
+​/* Cetak Langsung Thermal Printer */
+@media print {
+body * { visibility: hidden; }
+.receipt-wrapper, .receipt-wrapper * { visibility: visible; }
+.receipt-wrapper {
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+background: none;
+padding: 0;
+margin: 0;
+}
+.receipt {
+width: 100%;
+box-shadow: none;
+padding: 0;
+}
+@page {
+margin: 0mm;
+size: auto;
+}
+}
+​@media (max-width: 768px) {
+.app-container { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+​<div class="app-container">
+<!-- FORM PENGATURAN STRUK -->
+<div class="card">
+<h2>Pengaturan Struk Pertamina</h2>
+​<div class="form-row">
+<div class="form-group">
+<label>Kode SPBU</label>
+<input type="text" id="kodeSpbu" value="3115301" oninput="render()">
+</div>
+<div class="form-group">
+<label>Nama SPBU</label>
+<input type="text" id="namaSpbu" value="SPBU BSD" oninput="render()">
+</div>
+</div>
+​<div class="form-group">
+<label>Alamat SPBU</label>
+<input type="text" id="alamatSpbu" value="Jl. Letjend Sutopo Kav 2 A" oninput="render()">
+</div>
+​<div class="form-row">
+<div class="form-group">
+<label>Shift</label>
+<input type="text" id="shift" value="1" oninput="render()">
+</div>
+<div class="form-group">
+<label>No. Transaksi</label>
+<input type="text" id="noTrans" value="2040253" oninput="render()">
+</div>
+</div>
+​<div class="form-row">
+<div class="form-group">
+<label>Tanggal & Waktu</label>
+<input type="text" id="waktu" value="24/08/2026 11:37:53" oninput="render()">
+</div>
+<div class="form-group">
+<label>Pulau / Pompa</label>
+<input type="text" id="pompa" value="1" oninput="render()">
+</div>
+</div>
+​<div class="form-group">
+<label>Nama Produk BBM</label>
+<select id="produk" onchange="onProductChange()">
+<option value="PERTAMINA_DEX" data-harga="21150">PERTAMINA_DEX (Rp 21.150)</option>
+<option value="PERTAMAX_TURBO" data-harga="14400">PERTAMAX_TURBO (Rp 14.400)</option>
+<option value="PERTAMAX" data-harga="12950">PERTAMAX (Rp 12.950)</option>
+<option value="DEXLITE" data-harga="14550">DEXLITE (Rp 14.550)</option>
+<option value="PERTALITE" data-harga="10000">PERTALITE (Rp 10.000)</option>
+</select>
+</div>
+​<div class="form-row">
+<div class="form-group">
+<label>Harga / Liter (Rp)</label>
+<input type="number" id="hargaLiter" value="21150" oninput="hitungVolume()">
+</div>
+<div class="form-group">
+<label>Total Harga (Rp)</label>
+<input type="number" id="totalHarga" value="350000" oninput="hitungVolume()">
+</div>
+</div>
+​<div class="form-row">
+<div class="form-group">
+<label>Volume (Liter)</label>
+<input type="text" id="volume" value="16.54" oninput="render()">
+</div>
+<div class="form-group">
+<label>Nama Operator</label>
+<input type="text" id="operator" value="ANDI" oninput="render()">
+</div>
+</div>
+​<!-- SEKSI INPUT VOUCHER -->
+<div class="voucher-section">
+<label style="font-size:0.9rem; margin-bottom:8px;">Daftar Voucher Pertamina</label>
+<div id="voucherList"></div>
+<button class="btn-add" onclick="addVoucherInput()">+ Tambah Voucher</button>
+</div>
+​<button class="btn-print" onclick="window.print()">Cetak Struk Sekarang</button>
+</div>
+​<!-- PREVIEW STRUK THERMAL -->
+<div class="receipt-wrapper">
+<div class="receipt" id="receiptPreview">
+​<!-- LOGO -->
+<div class="logo-container">
+<svg width="22" height="22" viewBox="0 0 100 100">
+<path d="M20 15 L50 15 L35 45 L5 45 Z" fill="#000"/>
+<path d="M15 52 L45 52 L30 82 L0 82 Z" fill="#000"/>
+<path d="M52 15 L95 15 C95 45 75 82 45 82 L30 82 C55 82 70 50 52 15 Z" fill="#000"/>
+</svg>
+<span class="logo-text">PERTAMINA</span>
+</div>
+​<!-- HEADER -->
+<div class="text-center" id="outKodeSpbu">3115301</div>
+<div class="text-center" id="outNamaSpbu">SPBU BSD</div>
+<div class="text-center" id="outAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
+​<div style="margin-top: 4px;">
+<span>Shift: <span id="outShift">1</span></span>
+<span style="float: right;">No. Trans: <span id="outNoTrans">2040253</span></span>
+</div>
+<div>
+<span>Waktu: <span id="outWaktu">24/08/2026 11:37:53</span></span>
+</div>
+​<div class="dashed-line"></div>
+​<!-- DETAIL TRANSAKSI -->
+<div>Pulau/Pompa: <span id="outPompa">1</span></div>
+<div>Nama Produk: <span id="outProduk">PERTAMINA_DEX</span></div>
+<div>Harga/Liter: Rp. <span id="outHargaLiter">21,150</span></div>
+<div>Volume     : (L) <span id="outVolume">16.54</span></div>
+<div>Total Harga: Rp. <span id="outTotalHarga">350,000</span></div>
+<div>Operator   : <span id="outOperator">ANDI</span></div>
+​<div class="dashed-line"></div>
+​<!-- DAFTAR VOUCHER -->
+<div id="outVouchers"></div>
+​<div class="dashed-line"></div>
+​<!-- FOOTER -->
+<div class="text-center" style="margin-top: 6px;">
+Terima Kasih telah menggunakan
+
+produk <span id="outFooterProduk">Pertamina Dex</span>, Gunakan
+
+MyPertamina untuk menikmati
+
+berbagai promo dan program
+
+menarik lainnya.
+</div>
+​</div>
+</div>
+</div>
+​<script>
+// Data Voucher Awal Sesuai Gambar Contoh
+let vouchers = [
+{ code: 'VM0047513458', value: '25000' },
+{ code: 'VM0047513491', value: '25000' },
+{ code: 'VM0048402389', value: '50000' },
+{ code: 'VM0048402390', value: '50000' },
+{ code: 'VM0049134934', value: '100000' },
+{ code: 'VM0049134935', value: '100000' }
+];
+​function formatNumber(num) {
+if (!num) return '0';
+return Number(num).toLocaleString('id-ID');
+}
+​function onProductChange() {
+const sel = document.getElementById('produk');
+const harga = sel.options[sel.selectedIndex].getAttribute('data-harga');
+document.getElementById('hargaLiter').value = harga;
+hitungVolume();
+}
+​function hitungVolume() {
+const harga = parseFloat(document.getElementById('hargaLiter').value) || 0;
+const total = parseFloat(document.getElementById('totalHarga').value) || 0;
+​if (harga > 0 && total > 0) {
+const vol = (total / harga).toFixed(2);
+document.getElementById('volume').value = vol;
+}
+render();
+}
+​function addVoucherInput() {
+vouchers.push({ code: 'VM0000000000', value: '25000' });
+renderVoucherForm();
+render();
+}
+​function removeVoucherInput(index) {
+vouchers.splice(index, 1);
+renderVoucherForm();
+render();
+}
+​function updateVoucherData(index, field, val) {
+vouchers[index][field] = val;
+render();
+}
+​function renderVoucherForm() {
+const container = document.getElementById('voucherList');
+container.innerHTML = '';
+​vouchers.forEach((v, index) => {
+const row = document.createElement('div');
+row.className = 'voucher-item';
+row.innerHTML = <input type="text" placeholder="Kode Voucher" value="${v.code}" oninput="updateVoucherData(${index}, 'code', this.value)"> <input type="number" placeholder="Nominal" value="${v.value}" style="width: 110px;" oninput="updateVoucherData(${index}, 'value', this.value)"> <button class="btn-remove" onclick="removeVoucherInput(${index})">X</button>;
+container.appendChild(row);
+});
+}
+​function render() {
+// Basic Information
+document.getElementById('outKodeSpbu').innerText = document.getElementById('kodeSpbu').value;
+document.getElementById('outNamaSpbu').innerText = document.getElementById('namaSpbu').value;
+document.getElementById('outAlamatSpbu').innerText = document.getElementById('alamatSpbu').value;
+document.getElementById('outShift').innerText = document.getElementById('shift').value;
+document.getElementById('outNoTrans').innerText = document.getElementById('noTrans').value;
+document.getElementById('outWaktu').innerText = document.getElementById('waktu').value;
+​document.getElementById('outPompa').innerText = document.getElementById('pompa').value;
+​const produkVal = document.getElementById('produk').value;
+document.getElementById('outProduk').innerText = produkVal;
+​// Formatting Footer Product Name
+let ftProduk = 'Pertamina Dex';
+if (produkVal.includes('PERTALITE')) ftProduk = 'Pertalite';
+else if (produkVal.includes('PERTAMAX_TURBO')) ftProduk = 'Pertamax Turbo';
+else if (produkVal.includes('PERTAMAX')) ftProduk = 'Pertamax';
+else if (produkVal.includes('DEXLITE')) ftProduk = 'Dexlite';
+document.getElementById('outFooterProduk').innerText = ftProduk;
+​document.getElementById('outHargaLiter').innerText = formatNumber(document.getElementById('hargaLiter').value);
+document.getElementById('outVolume').innerText = document.getElementById('volume').value;
+document.getElementById('outTotalHarga').innerText = formatNumber(document.getElementById('totalHarga').value);
+document.getElementById('outOperator').innerText = document.getElementById('operator').value.toUpperCase();
+​// Render Voucher Section on Receipt
+const outVouchersContainer = document.getElementById('outVouchers');
+outVouchersContainer.innerHTML = '';
+​vouchers.forEach(v => {
+if (v.code.trim() !== '') {
+const codeDiv = document.createElement('div');
+codeDiv.className = 'voucher-row-code';
+codeDiv.innerText = VOUCHER ${v.code.toUpperCase()};
+​const valDiv = document.createElement('div');
+valDiv.className = 'voucher-row-val';
+valDiv.innerText = formatNumber(v.value);
+​outVouchersContainer.appendChild(codeDiv);
+outVouchersContainer.appendChild(valDiv);
+}
+});
+}
+​// Initial Load
+renderVoucherForm();
+render();
+</script>
+​</body>
+</html>
