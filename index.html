@@ -234,9 +234,9 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM</label>
                             <select id="selectProduk" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
-                                <option value="PERTAMINA_DEX" data-harga="21150" selected>PERTAMINA_DEX (Rp 21.150)</option>
+                                <option value="PERTAMINA_DEX" data-harga="21150">PERTAMINA_DEX (Rp 21.150)</option>
                                 <option value="PERTALITE" data-harga="10000">PERTALITE (Rp 10.000)</option>
-                                <option value="PERTAMAX" data-harga="12950">PERTAMAX (Rp 12.950)</option>
+                                <option value="PERTAMAX" data-harga="12950" selected>PERTAMAX (Rp 12.950)</option>
                                 <option value="PERTAMAX_TURBO" data-harga="14400">PERTAMAX_TURBO (Rp 14.400)</option>
                                 <option value="DEXLITE" data-harga="14550">DEXLITE (Rp 14.550)</option>
                                 <option value="SOLAR" data-harga="6800">SOLAR (Rp 6.800)</option>
@@ -247,15 +247,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Harga / Liter (Rp)</label>
-                            <input type="number" id="inputHarga" value="21150" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+                            <input type="number" id="inputHarga" value="12950" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Total Bayar (Rp)</label>
-                            <input type="number" id="inputTotalBayar" value="350000" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+                            <input type="number" id="inputTotalBayar" value="200000" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Volume (Liter)</label>
-                            <input type="number" id="inputVolume" value="16.54" step="0.01" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+                            <input type="number" id="inputVolume" value="15.44" step="0.01" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
                         </div>
                     </div>
 
@@ -289,7 +289,7 @@
 
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Kalimat Footer Struk:</label>
-                        <textarea id="inputFooterText" rows="3" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition">Terima Kasih telah menggunakan produk Pertamina Dex, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</textarea>
+                        <textarea id="inputFooterText" rows="3" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition">Terima Kasih telah menggunakan produk Pertamax, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</textarea>
                         <p class="text-[11px] text-slate-500 mt-1">Anda bisa mengubah kalimat di atas kapan saja sesuai jenis produk atau ketentuan SPBU Anda.</p>
                     </div>
                 </div>
@@ -356,7 +356,7 @@
                                 <span>Shift: <span id="viewShift">1</span></span>
                                 <span>No. Trans: <span id="viewNoTrans">2040253</span></span>
                             </div>
-                            <div>Waktu: <span id="viewWaktu">24/08/2026 11:37:53</span></div>
+                            <div>Waktu: <span id="viewWaktu">20/09/2026 21:53:58</span></div>
                         </div>
 
                         <!-- Garis Putus-putus Thermal -->
@@ -370,19 +370,19 @@
                             </div>
                             <div class="flex justify-between">
                                 <span>Nama Produk</span>
-                                <span>: <span id="viewProduk" class="font-bold">PERTAMINA_DEX</span></span>
+                                <span>: <span id="viewProduk" class="font-bold">PERTAMAX</span></span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Harga/Liter</span>
-                                <span>: Rp. <span id="viewHarga">21,150</span></span>
+                                <span>: Rp. <span id="viewHarga">12,950</span></span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Volume</span>
-                                <span>: (L) <span id="viewVolume">16.54</span></span>
+                                <span>: (L) <span id="viewVolume">15.44</span></span>
                             </div>
                             <div class="flex justify-between font-bold text-[11px]">
                                 <span>Total Harga</span>
-                                <span>: Rp. <span id="viewTotalBayar">350,000</span></span>
+                                <span>: Rp. <span id="viewTotalBayar">200,000</span></span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Operator</span>
@@ -390,7 +390,7 @@
                             </div>
                         </div>
 
-                        <!-- Container Dynamic Voucher (Muncul jika ada voucher) -->
+                        <!-- Container Dynamic Voucher (SEJAJAR HORIZONTAL) -->
                         <div id="viewVoucherWrapper">
                             <div class="border-b border-dashed border-black my-1.5"></div>
                             <div id="viewVoucherList" class="space-y-0.5 text-[10.5px]">
@@ -403,7 +403,7 @@
 
                         <!-- Footer Catatan Struk (DIKETIK BEBAS) -->
                         <div class="text-center text-[9.5px] space-y-0.5 leading-tight px-0.5 pt-0.5">
-                            <p id="viewFooterText">Terima Kasih telah menggunakan produk Pertamina Dex, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
+                            <p id="viewFooterText">Terima Kasih telah menggunakan produk Pertamax, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
                         </div>
 
                     </div>
@@ -551,12 +551,10 @@
         function isiContohVoucher() {
             document.getElementById('voucherContainer').innerHTML = '';
             const contohData = [
-                { code: 'VM0047513458', amount: 25000 },
-                { code: 'VM0047513491', amount: 25000 },
+                { code: 'VM0047513458', amount: 50000 },
+                { code: 'VM0047513491', amount: 50000 },
                 { code: 'VM0048402389', amount: 50000 },
-                { code: 'VM0048402390', amount: 50000 },
-                { code: 'VM0049134934', amount: 100000 },
-                { code: 'VM0049134935', amount: 100000 }
+                { code: 'VM0048402390', amount: 50000 }
             ];
 
             contohData.forEach(item => {
@@ -593,7 +591,7 @@
 
             document.getElementById('viewOperator').innerText = (document.getElementById('inputOperator').value || '-').toUpperCase();
 
-            // Render Voucher List di Struk
+            // Render Voucher List di Struk (Sejajar Kiri-Kanan)
             const voucherCodes = document.querySelectorAll('.voucher-code');
             const voucherAmounts = document.querySelectorAll('.voucher-amount');
             const voucherWrapper = document.getElementById('viewVoucherWrapper');
@@ -609,10 +607,10 @@
                 if (code !== '' || amt > 0) {
                     countVoucher++;
                     const itemDiv = document.createElement('div');
-                    itemDiv.className = 'space-y-0.5';
+                    itemDiv.className = 'flex justify-between items-center';
                     itemDiv.innerHTML = `
-                        <div>VOUCHER ${code.toUpperCase()}</div>
-                        <div class="text-right font-semibold">${formatNumber(amt)}</div>
+                        <span>${code.toUpperCase()}</span>
+                        <span>${formatNumber(amt)}</span>
                     `;
                     voucherList.appendChild(itemDiv);
                 }
@@ -812,15 +810,15 @@
 
             voucherCodes.forEach((inputCode, index) => {
                 const code = inputCode.value.trim();
-                const amt = parseFloat(voucherAmounts[index].value) || 0;
+                const amt = formatNumber(parseFloat(voucherAmounts[index].value) || 0);
 
-                if (code !== '' || amt > 0) {
+                if (code !== '' || amt !== '0') {
                     if (!hasVoucher) {
                         pushStr("--------------------------------\n");
                         hasVoucher = true;
                     }
-                    pushStr(`VOUCHER ${code.toUpperCase()}\n`);
-                    pushStr(formatEscPosRow("", formatNumber(amt)));
+                    // Cetak Kode Voucher di kiri dan Nominal di kanan dalam satu baris sejajar
+                    pushStr(formatEscPosRow(code.toUpperCase(), amt));
                 }
             });
 
@@ -917,3 +915,4 @@
     </script>
 </body>
 </html>
+
