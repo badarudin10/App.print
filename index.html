@@ -3,293 +3,440 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cetak Struk SPBU Pertamina + Voucher</title>
-<style>
-* { box-sizing: border-box; }
-body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: #eef2f6;
-margin: 0;
-padding: 20px;
-color: #333;
+<title>POS Pertamina - Generator Struk & Voucher</title>
+<!-- Google Fonts for Modern UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+​<style>
+:root {
+--primary: #0284c7;
+--primary-dark: #0369a1;
+--accent-red: #ed1c24;
+--accent-green: #39b54a;
+--accent-blue: #00a3e0;
+--bg-main: #f1f5f9;
+--card-bg: #ffffff;
+--border-color: #e2e8f0;
+--text-main: #0f172a;
+--text-muted: #64748b;
 }
-​.app-container {
-max-width: 1000px;
-margin: 0 auto;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 25px;
+​* { box-sizing: border-box; margin: 0; padding: 0; }
+​body {
+font-family: 'Plus Jakarta Sans', sans-serif;
+background-color: var(--bg-main);
+color: var(--text-main);
+padding-bottom: 40px;
 }
-​.card {
+​/* TOP NAVBAR */
+.navbar {
 background: #ffffff;
-padding: 22px;
-border-radius: 12px;
-box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+border-bottom: 1px solid var(--border-color);
+padding: 14px 28px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: sticky;
+top: 0;
+z-index: 100;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-​h2 {
-margin-top: 0;
-font-size: 1.2rem;
-color: #0f172a;
-border-bottom: 2px solid #e2e8f0;
-padding-bottom: 10px;
-margin-bottom: 15px;
+​.brand {
+display: flex;
+align-items: center;
+gap: 12px;
 }
-​.form-group {
-margin-bottom: 12px;
+​.brand-title {
+font-weight: 800;
+font-size: 1.15rem;
+color: var(--text-main);
+letter-spacing: -0.3px;
 }
-​.form-row {
+​.brand-badge {
+background: #e0f2fe;
+color: var(--primary-dark);
+font-size: 0.72rem;
+font-weight: 700;
+padding: 3px 8px;
+border-radius: 20px;
+text-transform: uppercase;
+}
+​.nav-actions {
 display: flex;
 gap: 10px;
 }
-​.form-row .form-group {
-flex: 1;
+​/* BUTTONS */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+padding: 9px 16px;
+border-radius: 8px;
+font-weight: 600;
+font-size: 0.88rem;
+cursor: pointer;
+transition: all 0.2s ease;
+border: 1px solid transparent;
+}
+​.btn-primary {
+background: var(--primary);
+color: white;
+box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+}
+.btn-primary:hover { background: var(--primary-dark); }
+​.btn-secondary {
+background: #ffffff;
+border-color: var(--border-color);
+color: var(--text-main);
+}
+.btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
+​.btn-success {
+background: #10b981;
+color: white;
+}
+.btn-success:hover { background: #059669; }
+​.btn-danger {
+background: #ef4444;
+color: white;
+padding: 6px 10px;
+font-size: 0.8rem;
+}
+.btn-danger:hover { background: #dc2626; }
+​/* LAYOUT CONTAINER */
+.main-container {
+max-width: 1200px;
+margin: 24px auto;
+padding: 0 20px;
+display: grid;
+grid-template-columns: 1.2fr 0.8fr;
+gap: 24px;
+align-items: start;
+}
+​/* CARD STYLING */
+.card {
+background: var(--card-bg);
+border-radius: 12px;
+border: 1px solid var(--border-color);
+padding: 20px;
+margin-bottom: 20px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+​.card-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 16px;
+padding-bottom: 12px;
+border-bottom: 1px solid var(--border-color);
+}
+​.card-title {
+font-size: 0.98rem;
+font-weight: 700;
+color: var(--text-main);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+​/* FORM STYLES */
+.form-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+}
+​.form-group {
+display: flex;
+flex-direction: column;
+gap: 5px;
+margin-bottom: 10px;
+}
+​.form-group.full {
+grid-column: span 2;
 }
 ​label {
-display: block;
-font-size: 0.8rem;
+font-size: 0.78rem;
 font-weight: 600;
-color: #475569;
-margin-bottom: 4px;
+color: var(--text-muted);
+text-transform: uppercase;
+letter-spacing: 0.3px;
 }
 ​input, select {
 width: 100%;
-padding: 8px 10px;
-border: 1px solid #cbd5e1;
-border-radius: 6px;
+padding: 9px 12px;
+border: 1px solid var(--border-color);
+border-radius: 7px;
 font-size: 0.88rem;
-outline: none;
-transition: border-color 0.2s;
+font-family: inherit;
+color: var(--text-main);
+background-color: #f8fafc;
+transition: all 0.2s;
 }
 ​input:focus, select:focus {
-border-color: #0284c7;
+outline: none;
+border-color: var(--primary);
+background-color: #ffffff;
+box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
 }
-​.voucher-section {
+​/* VOUCHER CONTAINER */
+.voucher-box {
 background: #f8fafc;
-padding: 12px;
 border: 1px dashed #cbd5e1;
 border-radius: 8px;
-margin-top: 15px;
+padding: 14px;
 }
-​.voucher-item {
+​.voucher-row {
 display: flex;
 gap: 8px;
 margin-bottom: 8px;
 align-items: center;
 }
-​.btn-add {
-background: #10b981;
-color: white;
-border: none;
-padding: 6px 12px;
-border-radius: 5px;
-font-size: 0.8rem;
-font-weight: bold;
-cursor: pointer;
-margin-top: 5px;
+​/* PREVIEW CONTAINER */
+.preview-sticky {
+position: sticky;
+top: 90px;
 }
-​.btn-remove {
-background: #ef4444;
-color: white;
-border: none;
-padding: 8px 10px;
-border-radius: 5px;
-cursor: pointer;
-font-size: 0.8rem;
-}
-​.btn-print {
-width: 100%;
-padding: 14px;
-background: #0284c7;
-color: white;
-border: none;
-border-radius: 8px;
-font-weight: bold;
-font-size: 1rem;
-cursor: pointer;
-margin-top: 20px;
-box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
-}
-​.btn-print:hover { background: #0369a1; }
-​/* Area Struk Thermal Preview */
-.receipt-wrapper {
+​.receipt-frame {
+background: #1e293b;
+padding: 30px 20px;
+border-radius: 16px;
 display: flex;
 justify-content: center;
-align-items: flex-start;
-background: #d1d5db;
-padding: 20px;
-border-radius: 12px;
-}
-​.receipt {
-width: 58mm;
-background: #fff;
-padding: 15px 10px;
-font-family: 'Courier New', Courier, monospace;
-font-size: 11.5px;
-line-height: 1.25;
-color: #000;
-box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-letter-spacing: -0.2px;
-}
-​.logo-container {
-display: flex;
 align-items: center;
+box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+}
+​/* THERMAL RECEIPT STYLING (58mm Exact Representation) */
+.receipt {
+width: 58mm;
+background: #ffffff;
+padding: 18px 10px;
+font-family: 'Space Mono', 'Courier New', monospace;
+font-size: 11px;
+line-height: 1.25;
+color: #000000;
+box-shadow: 0 0 12px rgba(0,0,0,0.2);
+border-radius: 2px;
+}
+​.receipt-header {
+text-align: center;
+margin-bottom: 6px;
+}
+​.receipt-logo {
+display: flex;
 justify-content: center;
+align-items: center;
 gap: 6px;
 margin-bottom: 4px;
 }
-​.logo-text {
-font-weight: 900;
-font-size: 15px;
+​.receipt-logo svg {
+height: 22px;
+width: auto;
+}
+​.receipt-title {
+font-size: 13px;
+font-weight: 700;
 font-family: Arial, sans-serif;
 letter-spacing: 0.5px;
 }
-​.text-center { text-align: center; }
-.text-right { text-align: right; }
 ​.dashed-line {
-border-bottom: 1px dashed #000;
+border-bottom: 1px dashed #000000;
 margin: 6px 0;
 }
-​.flex-space {
+​.flex-row {
 display: flex;
 justify-content: space-between;
 }
-​.voucher-row-code {
+​.v-code {
 margin-top: 4px;
+font-weight: 700;
 }
-​.voucher-row-val {
+​.v-val {
 text-align: right;
 margin-bottom: 4px;
 }
-​/* Cetak Langsung Thermal Printer */
+​.footer-text {
+text-align: center;
+margin-top: 8px;
+font-size: 10px;
+line-height: 1.2;
+}
+​/* PRINT RULES */
 @media print {
 body * { visibility: hidden; }
-.receipt-wrapper, .receipt-wrapper * { visibility: visible; }
-.receipt-wrapper {
+.receipt-frame, .receipt-frame * { visibility: visible; }
+.receipt-frame {
 position: absolute;
 left: 0;
 top: 0;
 width: 100%;
-background: none;
-padding: 0;
-margin: 0;
+background: transparent !important;
+padding: 0 !important;
+margin: 0 !important;
 }
 .receipt {
-width: 100%;
-box-shadow: none;
-padding: 0;
+width: 100% !important;
+box-shadow: none !important;
+padding: 0 !important;
 }
 @page {
-margin: 0mm;
 size: auto;
+margin: 0mm;
 }
 }
-​@media (max-width: 768px) {
-.app-container { grid-template-columns: 1fr; }
+​@media (max-width: 850px) {
+.main-container {
+grid-template-columns: 1fr;
+}
+.preview-sticky {
+position: static;
+}
 }
 </style>
 </head>
 <body>
-​<div class="app-container">
-<!-- FORM PENGATURAN STRUK -->
+​<!-- TOP NAVBAR -->
+<header class="navbar">
+<div class="brand">
+<!-- Authentic Pertamina Logo Vector (Color UI) -->
+<svg width="32" height="28" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Red Shape -->
+<path d="M40 10 L120 10 L80 70 L0 70 Z" fill="#ED1C24"/>
+<!-- Green Shape -->
+<path d="M30 85 L110 85 L70 145 L-10 145 Z" fill="#39B54A"/>
+<!-- Blue Shape (P Loop) -->
+<path d="M130 10 L200 10 C235 10 245 40 220 80 L195 120 C175 150 140 145 110 145 L70 145 L110 85 L135 85 C155 85 175 75 185 55 C192 38 180 10 150 10 Z" fill="#00A3E0"/>
+</svg>
+<div>
+<span class="brand-title">Pertamina POS & Voucher</span>
+<span class="brand-badge">Professional Edition</span>
+</div>
+</div>
+<div class="nav-actions">
+<button class="btn btn-secondary" onclick="setWaktuSekarang()">
+⏱️ Set Jam Sekarang
+</button>
+<button class="btn btn-primary" onclick="window.print()">
+🖨️ Cetak Struk
+</button>
+</div>
+</header>
+​<!-- MAIN CONTAINER -->
+<main class="main-container">
+​<!-- LEFT PANEL: FORM EDITOR -->
+<div class="editor-panel">
+​<!-- CARD 1: LOKASI & HEADER SPBU -->
 <div class="card">
-<h2>Pengaturan Struk Pertamina</h2>
-​<div class="form-row">
+<div class="card-header">
+<span class="card-title">🏢 Informasi SPBU & Sesi</span>
+</div>
+<div class="form-grid">
 <div class="form-group">
 <label>Kode SPBU</label>
-<input type="text" id="kodeSpbu" value="3115301" oninput="render()">
+<input type="text" id="kodeSpbu" value="3115301" oninput="updateReceipt()">
 </div>
 <div class="form-group">
 <label>Nama SPBU</label>
-<input type="text" id="namaSpbu" value="SPBU BSD" oninput="render()">
+<input type="text" id="namaSpbu" value="SPBU BSD" oninput="updateReceipt()">
 </div>
-</div>
-​<div class="form-group">
+<div class="form-group full">
 <label>Alamat SPBU</label>
-<input type="text" id="alamatSpbu" value="Jl. Letjend Sutopo Kav 2 A" oninput="render()">
+<input type="text" id="alamatSpbu" value="Jl. Letjend Sutopo Kav 2 A" oninput="updateReceipt()">
 </div>
-​<div class="form-row">
 <div class="form-group">
 <label>Shift</label>
-<input type="text" id="shift" value="1" oninput="render()">
+<input type="text" id="shift" value="1" oninput="updateReceipt()">
 </div>
 <div class="form-group">
 <label>No. Transaksi</label>
-<input type="text" id="noTrans" value="2040253" oninput="render()">
+<input type="text" id="noTrans" value="2040253" oninput="updateReceipt()">
+</div>
+<div class="form-group full">
+<label>Waktu Transaksi (DD/MM/YYYY HH:MM:SS)</label>
+<input type="text" id="waktu" value="24/08/2026 11:37:53" oninput="updateReceipt()">
 </div>
 </div>
-​<div class="form-row">
-<div class="form-group">
-<label>Tanggal & Waktu</label>
-<input type="text" id="waktu" value="24/08/2026 11:37:53" oninput="render()">
 </div>
+​<!-- CARD 2: TRANSAKSI BBM -->
+<div class="card">
+<div class="card-header">
+<span class="card-title">⛽ Detail Pembelian BBM</span>
+</div>
+<div class="form-grid">
 <div class="form-group">
 <label>Pulau / Pompa</label>
-<input type="text" id="pompa" value="1" oninput="render()">
+<input type="text" id="pompa" value="1" oninput="updateReceipt()">
 </div>
-</div>
-​<div class="form-group">
-<label>Nama Produk BBM</label>
-<select id="produk" onchange="onProductChange()">
-<option value="PERTAMINA_DEX" data-harga="21150">PERTAMINA_DEX (Rp 21.150)</option>
-<option value="PERTAMAX_TURBO" data-harga="14400">PERTAMAX_TURBO (Rp 14.400)</option>
+<div class="form-group">
+<label>Produk BBM</label>
+<select id="produk" onchange="onProductSelect()">
+<option value="PERTAMINA_DEX" data-harga="21150">PERTAMINA DEX (Rp 21.150)</option>
+<option value="PERTAMAX_TURBO" data-harga="14400">PERTAMAX TURBO (Rp 14.400)</option>
 <option value="PERTAMAX" data-harga="12950">PERTAMAX (Rp 12.950)</option>
 <option value="DEXLITE" data-harga="14550">DEXLITE (Rp 14.550)</option>
 <option value="PERTALITE" data-harga="10000">PERTALITE (Rp 10.000)</option>
 </select>
 </div>
-​<div class="form-row">
 <div class="form-group">
-<label>Harga / Liter (Rp)</label>
-<input type="number" id="hargaLiter" value="21150" oninput="hitungVolume()">
+<label>Harga per Liter (Rp)</label>
+<input type="number" id="hargaLiter" value="21150" oninput="hitungVolumeAuto()">
 </div>
 <div class="form-group">
-<label>Total Harga (Rp)</label>
-<input type="number" id="totalHarga" value="350000" oninput="hitungVolume()">
+<label>Total Transaksi (Rp)</label>
+<input type="number" id="totalHarga" value="350000" oninput="hitungVolumeAuto()">
 </div>
-</div>
-​<div class="form-row">
 <div class="form-group">
 <label>Volume (Liter)</label>
-<input type="text" id="volume" value="16.54" oninput="render()">
+<input type="text" id="volume" value="16.54" oninput="updateReceipt()">
 </div>
 <div class="form-group">
 <label>Nama Operator</label>
-<input type="text" id="operator" value="ANDI" oninput="render()">
+<input type="text" id="operator" value="ANDI" oninput="updateReceipt()">
 </div>
 </div>
-​<!-- SEKSI INPUT VOUCHER -->
-<div class="voucher-section">
-<label style="font-size:0.9rem; margin-bottom:8px;">Daftar Voucher Pertamina</label>
-<div id="voucherList"></div>
-<button class="btn-add" onclick="addVoucherInput()">+ Tambah Voucher</button>
 </div>
-​<button class="btn-print" onclick="window.print()">Cetak Struk Sekarang</button>
+​<!-- CARD 3: VOUCHER PERTAMINA -->
+<div class="card">
+<div class="card-header">
+<span class="card-title">🎟️ Rincian Voucher</span>
+<button class="btn btn-success" onclick="addVoucherRow()">+ Tambah Voucher</button>
 </div>
-​<!-- PREVIEW STRUK THERMAL -->
-<div class="receipt-wrapper">
-<div class="receipt" id="receiptPreview">
-​<!-- LOGO -->
-<div class="logo-container">
-<svg width="22" height="22" viewBox="0 0 100 100">
-<path d="M20 15 L50 15 L35 45 L5 45 Z" fill="#000"/>
-<path d="M15 52 L45 52 L30 82 L0 82 Z" fill="#000"/>
-<path d="M52 15 L95 15 C95 45 75 82 45 82 L30 82 C55 82 70 50 52 15 Z" fill="#000"/>
+<div class="voucher-box">
+<div id="voucherContainer"></div>
+</div>
+</div>
+​</div>
+​<!-- RIGHT PANEL: STICKY RECEIPT PREVIEW -->
+<div class="preview-panel">
+<div class="preview-sticky">
+<div class="card-header" style="background:#fff; padding: 12px 16px; border-radius: 12px 12px 0 0; margin-bottom: 0;">
+<span class="card-title">📄 Pratinjau Struk (58mm)</span>
+<span style="font-size: 0.75rem; color: var(--text-muted);">Siap Cetak Thermal</span>
+</div>
+<div class="receipt-frame">
+<div class="receipt" id="receiptOutput">
+​<!-- RECEIPT LOGO & HEADER -->
+<div class="receipt-header">
+<div class="receipt-logo">
+<!-- Authentic Pertamina Vector Emblem Monochrome for Thermal Print -->
+<svg width="24" height="20" viewBox="0 0 200 180" fill="#000000">
+<path d="M40 10 L120 10 L80 70 L0 70 Z"/>
+<path d="M30 85 L110 85 L70 145 L-10 145 Z"/>
+<path d="M130 10 L200 10 C235 10 245 40 220 80 L195 120 C175 150 140 145 110 145 L70 145 L110 85 L135 85 C155 85 175 75 185 55 C192 38 180 10 150 10 Z"/>
 </svg>
-<span class="logo-text">PERTAMINA</span>
+<span class="receipt-title">PERTAMINA</span>
 </div>
-​<!-- HEADER -->
-<div class="text-center" id="outKodeSpbu">3115301</div>
-<div class="text-center" id="outNamaSpbu">SPBU BSD</div>
-<div class="text-center" id="outAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
-​<div style="margin-top: 4px;">
+<div id="outKodeSpbu">3115301</div>
+<div id="outNamaSpbu">SPBU BSD</div>
+<div id="outAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
+</div>
+​<div class="flex-row">
 <span>Shift: <span id="outShift">1</span></span>
-<span style="float: right;">No. Trans: <span id="outNoTrans">2040253</span></span>
+<span>No. Trans: <span id="outNoTrans">2040253</span></span>
 </div>
 <div>
 <span>Waktu: <span id="outWaktu">24/08/2026 11:37:53</span></span>
 </div>
 ​<div class="dashed-line"></div>
-​<!-- DETAIL TRANSAKSI -->
+​<!-- DETAIL BOUGHT -->
 <div>Pulau/Pompa: <span id="outPompa">1</span></div>
 <div>Nama Produk: <span id="outProduk">PERTAMINA_DEX</span></div>
 <div>Harga/Liter: Rp. <span id="outHargaLiter">21,150</span></div>
@@ -297,11 +444,11 @@ size: auto;
 <div>Total Harga: Rp. <span id="outTotalHarga">350,000</span></div>
 <div>Operator   : <span id="outOperator">ANDI</span></div>
 ​<div class="dashed-line"></div>
-​<!-- DAFTAR VOUCHER -->
-<div id="outVouchers"></div>
+​<!-- VOUCHERS LIST -->
+<div id="outVouchersList"></div>
 ​<div class="dashed-line"></div>
 ​<!-- FOOTER -->
-<div class="text-center" style="margin-top: 6px;">
+<div class="footer-text">
 Terima Kasih telah menggunakan
 
 produk <span id="outFooterProduk">Pertamina Dex</span>, Gunakan
@@ -315,100 +462,114 @@ menarik lainnya.
 ​</div>
 </div>
 </div>
+</div>
+​</main>
 ​<script>
-// Data Voucher Awal Sesuai Gambar Contoh
+// State Vouchers
 let vouchers = [
-{ code: 'VM0047513458', value: '25000' },
-{ code: 'VM0047513491', value: '25000' },
-{ code: 'VM0048402389', value: '50000' },
-{ code: 'VM0048402390', value: '50000' },
-{ code: 'VM0049134934', value: '100000' },
-{ code: 'VM0049134935', value: '100000' }
+{ code: 'VM0047513458', val: '25000' },
+{ code: 'VM0047513491', val: '25000' },
+{ code: 'VM0048402389', val: '50000' },
+{ code: 'VM0048402390', val: '50000' },
+{ code: 'VM0049134934', val: '100000' },
+{ code: 'VM0049134935', val: '100000' }
 ];
-​function formatNumber(num) {
+​function formatRibuan(num) {
 if (!num) return '0';
 return Number(num).toLocaleString('id-ID');
 }
-​function onProductChange() {
-const sel = document.getElementById('produk');
-const harga = sel.options[sel.selectedIndex].getAttribute('data-harga');
-document.getElementById('hargaLiter').value = harga;
-hitungVolume();
+​function setWaktuSekarang() {
+const now = new Date();
+const dd = String(now.getDate()).padStart(2, '0');
+const mm = String(now.getMonth() + 1).padStart(2, '0');
+const yyyy = now.getFullYear();
+const hh = String(now.getHours()).padStart(2, '0');
+const min = String(now.getMinutes()).padStart(2, '0');
+const ss = String(now.getSeconds()).padStart(2, '0');
+​document.getElementById('waktu').value = ${dd}/${mm}/${yyyy} ${hh}:${min}:${ss};
+updateReceipt();
 }
-​function hitungVolume() {
+​function onProductSelect() {
+const select = document.getElementById('produk');
+const harga = select.options[select.selectedIndex].getAttribute('data-harga');
+document.getElementById('hargaLiter').value = harga;
+hitungVolumeAuto();
+}
+​function hitungVolumeAuto() {
 const harga = parseFloat(document.getElementById('hargaLiter').value) || 0;
 const total = parseFloat(document.getElementById('totalHarga').value) || 0;
 ​if (harga > 0 && total > 0) {
-const vol = (total / harga).toFixed(2);
-document.getElementById('volume').value = vol;
+const volume = (total / harga).toFixed(2);
+document.getElementById('volume').value = volume;
 }
-render();
+updateReceipt();
 }
-​function addVoucherInput() {
-vouchers.push({ code: 'VM0000000000', value: '25000' });
+​function addVoucherRow() {
+vouchers.push({ code: 'VM0000000000', val: '50000' });
 renderVoucherForm();
-render();
+updateReceipt();
 }
-​function removeVoucherInput(index) {
+​function removeVoucherRow(index) {
 vouchers.splice(index, 1);
 renderVoucherForm();
-render();
+updateReceipt();
 }
-​function updateVoucherData(index, field, val) {
-vouchers[index][field] = val;
-render();
+​function updateVoucherItem(index, key, value) {
+vouchers[index][key] = value;
+updateReceipt();
 }
 ​function renderVoucherForm() {
-const container = document.getElementById('voucherList');
+const container = document.getElementById('voucherContainer');
 container.innerHTML = '';
-​vouchers.forEach((v, index) => {
+​vouchers.forEach((item, idx) => {
 const row = document.createElement('div');
-row.className = 'voucher-item';
-row.innerHTML = <input type="text" placeholder="Kode Voucher" value="${v.code}" oninput="updateVoucherData(${index}, 'code', this.value)"> <input type="number" placeholder="Nominal" value="${v.value}" style="width: 110px;" oninput="updateVoucherData(${index}, 'value', this.value)"> <button class="btn-remove" onclick="removeVoucherInput(${index})">X</button>;
+row.className = 'voucher-row';
+row.innerHTML = <input type="text" placeholder="Kode Voucher" value="${item.code}" oninput="updateVoucherItem(${idx}, 'code', this.value)"> <input type="number" placeholder="Nominal" value="${item.val}" style="width: 130px;" oninput="updateVoucherItem(${idx}, 'val', this.value)"> <button class="btn btn-danger" onclick="removeVoucherRow(${idx})">✕</button>;
 container.appendChild(row);
 });
 }
-​function render() {
-// Basic Information
+​function updateReceipt() {
+// Header Info
 document.getElementById('outKodeSpbu').innerText = document.getElementById('kodeSpbu').value;
 document.getElementById('outNamaSpbu').innerText = document.getElementById('namaSpbu').value;
 document.getElementById('outAlamatSpbu').innerText = document.getElementById('alamatSpbu').value;
 document.getElementById('outShift').innerText = document.getElementById('shift').value;
 document.getElementById('outNoTrans').innerText = document.getElementById('noTrans').value;
 document.getElementById('outWaktu').innerText = document.getElementById('waktu').value;
-​document.getElementById('outPompa').innerText = document.getElementById('pompa').value;
+​// Purchase Info
+document.getElementById('outPompa').innerText = document.getElementById('pompa').value;
 ​const produkVal = document.getElementById('produk').value;
 document.getElementById('outProduk').innerText = produkVal;
-​// Formatting Footer Product Name
-let ftProduk = 'Pertamina Dex';
-if (produkVal.includes('PERTALITE')) ftProduk = 'Pertalite';
-else if (produkVal.includes('PERTAMAX_TURBO')) ftProduk = 'Pertamax Turbo';
-else if (produkVal.includes('PERTAMAX')) ftProduk = 'Pertamax';
-else if (produkVal.includes('DEXLITE')) ftProduk = 'Dexlite';
-document.getElementById('outFooterProduk').innerText = ftProduk;
-​document.getElementById('outHargaLiter').innerText = formatNumber(document.getElementById('hargaLiter').value);
+​// Footer Text Formatting
+let ftProd = 'Pertamina Dex';
+if (produkVal.includes('PERTALITE')) ftProd = 'Pertalite';
+else if (produkVal.includes('PERTAMAX_TURBO')) ftProd = 'Pertamax Turbo';
+else if (produkVal.includes('PERTAMAX')) ftProd = 'Pertamax';
+else if (produkVal.includes('DEXLITE')) ftProd = 'Dexlite';
+document.getElementById('outFooterProduk').innerText = ftProd;
+​document.getElementById('outHargaLiter').innerText = formatRibuan(document.getElementById('hargaLiter').value);
 document.getElementById('outVolume').innerText = document.getElementById('volume').value;
-document.getElementById('outTotalHarga').innerText = formatNumber(document.getElementById('totalHarga').value);
+document.getElementById('outTotalHarga').innerText = formatRibuan(document.getElementById('totalHarga').value);
 document.getElementById('outOperator').innerText = document.getElementById('operator').value.toUpperCase();
-​// Render Voucher Section on Receipt
-const outVouchersContainer = document.getElementById('outVouchers');
-outVouchersContainer.innerHTML = '';
+​// Render Vouchers List
+const listContainer = document.getElementById('outVouchersList');
+listContainer.innerHTML = '';
 ​vouchers.forEach(v => {
 if (v.code.trim() !== '') {
-const codeDiv = document.createElement('div');
-codeDiv.className = 'voucher-row-code';
-codeDiv.innerText = VOUCHER ${v.code.toUpperCase()};
-​const valDiv = document.createElement('div');
-valDiv.className = 'voucher-row-val';
-valDiv.innerText = formatNumber(v.value);
-​outVouchersContainer.appendChild(codeDiv);
-outVouchersContainer.appendChild(valDiv);
+const codeEl = document.createElement('div');
+codeEl.className = 'v-code';
+codeEl.innerText = VOUCHER ${v.code.toUpperCase()};
+​const valEl = document.createElement('div');
+valEl.className = 'v-val';
+valEl.innerText = formatRibuan(v.val);
+​listContainer.appendChild(codeEl);
+listContainer.appendChild(valEl);
 }
 });
 }
-​// Initial Load
+​// Initialize App
 renderVoucherForm();
-render();
+updateReceipt();
 </script>
-​</body>
+</body>
 </html>
