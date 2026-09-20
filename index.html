@@ -277,7 +277,24 @@
                     </div>
                 </div>
 
-                <!-- Section 3: Daftar Voucher (Fitur Interaktif) -->
+                <!-- Section 3: Teks Footer Struk (DAPAT DIKETIK BEBAS) -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                        <div class="flex items-center gap-2.5 text-amber-400 font-semibold text-sm">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <span>Teks Catatan Footer Struk</span>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Bebas diketik sesuai SPBU</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Kalimat Footer Struk:</label>
+                        <textarea id="inputFooterText" rows="3" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition">Terima Kasih telah menggunakan produk Pertamina Dex, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</textarea>
+                        <p class="text-[11px] text-slate-500 mt-1">Anda bisa mengubah kalimat di atas kapan saja sesuai jenis produk atau ketentuan SPBU Anda.</p>
+                    </div>
+                </div>
+
+                <!-- Section 4: Daftar Voucher (Fitur Interaktif) -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5 text-amber-400 font-semibold text-sm">
@@ -319,7 +336,6 @@
                         <!-- Header Logo & SPBU -->
                         <div class="text-center space-y-0.5 mb-1.5">
                             
-                            <!-- PERBAIKAN LOGO & TEKS PERTAMINA -->
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
                                 <svg class="w-7 h-6 text-black fill-current shrink-0" viewBox="10 15 170 110" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
@@ -385,9 +401,9 @@
                         <!-- Garis Pembatas Footer -->
                         <div class="border-b border-dashed border-black my-1.5"></div>
 
-                        <!-- Footer Catatan Struk (NAMA PRODUK DINAMISsesuai Pilihan) -->
+                        <!-- Footer Catatan Struk (DIKETIK BEBAS) -->
                         <div class="text-center text-[9.5px] space-y-0.5 leading-tight px-0.5 pt-0.5">
-                            <p>Terima Kasih telah menggunakan produk <span id="viewFooterProduk">Pertamina Dex</span>, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
+                            <p id="viewFooterText">Terima Kasih telah menggunakan produk Pertamina Dex, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
                         </div>
 
                     </div>
@@ -428,15 +444,6 @@
             '0000e025-0000-1000-8000-00805f9b34fb',
             '0000ff00-0000-1000-8000-00805f9b34fb'
         ];
-
-        // Format Teks Produk untuk Footer (Mengubah "PERTAMINA_DEX" menjadi "Pertamina Dex", "PERTAMAX" menjadi "Pertamax", dsb)
-        function formatProdukFooter(namaProduk) {
-            if (!namaProduk) return '';
-            // Ganti underscore dengan spasi
-            let clean = namaProduk.replace(/_/g, ' ');
-            // Ubah Format Title Case (Huruf Depan Kapital, Sisanya Kecil)
-            return clean.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-        }
 
         // Formatter Angka dengan Koma
         function formatNumber(num) {
@@ -571,8 +578,9 @@
             const produkVal = produkSelect.value;
             document.getElementById('viewProduk').innerText = produkVal;
 
-            // UPDATE TEKS FOOTER DINAMIS SESUAI PRODUK
-            document.getElementById('viewFooterProduk').innerText = formatProdukFooter(produkVal);
+            // AMBIL TEKS FOOTER DARI KOLOM INPUT
+            const footerTextVal = document.getElementById('inputFooterText').value || '';
+            document.getElementById('viewFooterText').innerText = footerTextVal;
 
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             document.getElementById('viewHarga').innerText = formatNumber(harga);
@@ -723,6 +731,24 @@
             return left + ' '.repeat(totalSpaces) + right + '\n';
         }
 
+        // Fungsi Memecah Teks Panjang Menjadi Baris Per 32 Karakter untuk Printer Thermal
+        function wrapTextToWidth(text, maxLen = 32) {
+            const words = text.split(' ');
+            let lines = [];
+            let currentLine = '';
+
+            words.forEach(word => {
+                if ((currentLine + word).length + (currentLine ? 1 : 0) <= maxLen) {
+                    currentLine += (currentLine ? ' ' : '') + word;
+                } else {
+                    if (currentLine) lines.push(currentLine);
+                    currentLine = word;
+                }
+            });
+            if (currentLine) lines.push(currentLine);
+            return lines;
+        }
+
         function generateEscPosCommands() {
             const encoder = new TextEncoder();
             let commands = [];
@@ -800,15 +826,14 @@
 
             pushStr("--------------------------------\n");
 
-            // Dinamis sesuai produk pada cetakan Bluetooth
-            const namaProdukFooter = formatProdukFooter(produk);
+            // Footer Text Dinamis dari Input Textarea (Centered)
+            const customFooterText = document.getElementById('inputFooterText').value || '';
+            const wrappedFooterLines = wrapTextToWidth(customFooterText, 32);
 
-            push([0x1B, 0x61, 0x01]);
-            pushStr(`Terima Kasih telah menggunakan\n`);
-            pushStr(`produk ${namaProdukFooter}, Gunakan\n`);
-            pushStr("MyPertamina untuk menikmati\n");
-            pushStr("berbagai promo dan program\n");
-            pushStr("menarik lainnya.\n");
+            push([0x1B, 0x61, 0x01]); // Center
+            wrappedFooterLines.forEach(line => {
+                pushStr(line + "\n");
+            });
 
             push([0x1B, 0x64, 0x04]);
 
@@ -880,6 +905,8 @@
                 updatePreview();
             });
 
+            document.getElementById('inputFooterText').addEventListener('input', updatePreview);
+
             const inputs = ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputWaktu', 'inputPompa', 'inputOperator'];
             inputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', updatePreview);
@@ -890,4 +917,3 @@
     </script>
 </body>
 </html>
-
