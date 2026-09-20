@@ -3,65 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POS Pertamina - Generator Struk & Voucher</title>
-<!-- Google Fonts for Modern UI -->
+<title>Pertamina POS Terminal & Receipt Generator</title>
+​<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 ​<style>
 :root {
---primary: #0284c7;
---primary-dark: #0369a1;
---accent-red: #ed1c24;
---accent-green: #39b54a;
---accent-blue: #00a3e0;
---bg-main: #f1f5f9;
+--pertamina-red: #ED1C24;
+--pertamina-green: #39B54A;
+--pertamina-blue: #00A3E0;
+--bg-app: #0f172a;
+--panel-bg: #1e293b;
 --card-bg: #ffffff;
 --border-color: #e2e8f0;
 --text-main: #0f172a;
 --text-muted: #64748b;
+--accent-blue: #0284c7;
 }
 ​* { box-sizing: border-box; margin: 0; padding: 0; }
 ​body {
 font-family: 'Plus Jakarta Sans', sans-serif;
-background-color: var(--bg-main);
+background-color: #f1f5f9;
 color: var(--text-main);
-padding-bottom: 40px;
+min-height: 100vh;
 }
-​/* TOP NAVBAR */
-.navbar {
+​/* HEADER APP BAR */
+.app-bar {
 background: #ffffff;
 border-bottom: 1px solid var(--border-color);
-padding: 14px 28px;
+padding: 12px 28px;
 display: flex;
 justify-content: space-between;
 align-items: center;
 position: sticky;
 top: 0;
 z-index: 100;
-box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
-​.brand {
+​.brand-group {
 display: flex;
 align-items: center;
-gap: 12px;
+gap: 14px;
 }
-​.brand-title {
+​.logo-container {
+display: flex;
+align-items: center;
+}
+​.brand-info h1 {
+font-size: 1.1rem;
 font-weight: 800;
-font-size: 1.15rem;
-color: var(--text-main);
+color: #0f172a;
 letter-spacing: -0.3px;
+line-height: 1.2;
 }
-​.brand-badge {
-background: #e0f2fe;
-color: var(--primary-dark);
-font-size: 0.72rem;
-font-weight: 700;
-padding: 3px 8px;
+​.brand-info p {
+font-size: 0.75rem;
+color: var(--text-muted);
+font-weight: 500;
+}
+​.status-pill {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+background: #ecfdf5;
+color: #047857;
+border: 1px solid #a7f3d0;
+padding: 4px 12px;
 border-radius: 20px;
-text-transform: uppercase;
+font-size: 0.75rem;
+font-weight: 700;
 }
-​.nav-actions {
+​.status-dot {
+width: 8px;
+height: 8px;
+background-color: #10b981;
+border-radius: 50%;
+box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+​.header-actions {
 display: flex;
 gap: 10px;
 }
@@ -74,71 +94,74 @@ gap: 8px;
 padding: 9px 16px;
 border-radius: 8px;
 font-weight: 600;
-font-size: 0.88rem;
+font-size: 0.85rem;
 cursor: pointer;
-transition: all 0.2s ease;
+transition: all 0.2s;
 border: 1px solid transparent;
 }
 ​.btn-primary {
-background: var(--primary);
-color: white;
-box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+background: var(--accent-blue);
+color: #ffffff;
+box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
 }
-.btn-primary:hover { background: var(--primary-dark); }
-​.btn-secondary {
+.btn-primary:hover { background: #0369a1; }
+​.btn-outline {
 background: #ffffff;
 border-color: var(--border-color);
 color: var(--text-main);
 }
-.btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
+.btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
 ​.btn-success {
 background: #10b981;
 color: white;
 }
 .btn-success:hover { background: #059669; }
-​.btn-danger {
-background: #ef4444;
-color: white;
+​.btn-danger-sm {
+background: #fee2e2;
+color: #dc2626;
+border: 1px solid #fca5a5;
 padding: 6px 10px;
-font-size: 0.8rem;
+border-radius: 6px;
+font-weight: 700;
+cursor: pointer;
 }
-.btn-danger:hover { background: #dc2626; }
-​/* LAYOUT CONTAINER */
-.main-container {
-max-width: 1200px;
+.btn-danger-sm:hover { background: #ef4444; color: white; }
+​/* LAYOUT GRID */
+.app-layout {
+max-width: 1280px;
 margin: 24px auto;
 padding: 0 20px;
 display: grid;
-grid-template-columns: 1.2fr 0.8fr;
-gap: 24px;
+grid-template-columns: 1fr 420px;
+gap: 28px;
 align-items: start;
 }
-​/* CARD STYLING */
+​/* CARDS */
 .card {
-background: var(--card-bg);
+background: #ffffff;
 border-radius: 12px;
 border: 1px solid var(--border-color);
 padding: 20px;
 margin-bottom: 20px;
-box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+box-shadow: 0 1px 3px rgba(0,0,0,0.02);
 }
 ​.card-header {
 display: flex;
 justify-content: space-between;
 align-items: center;
 margin-bottom: 16px;
-padding-bottom: 12px;
-border-bottom: 1px solid var(--border-color);
+padding-bottom: 10px;
+border-bottom: 1px solid #f1f5f9;
 }
 ​.card-title {
-font-size: 0.98rem;
+font-size: 0.95rem;
 font-weight: 700;
-color: var(--text-main);
+color: #0f172a;
 display: flex;
 align-items: center;
 gap: 8px;
 }
-​/* FORM STYLES */
+​/* FORM GRID */
 .form-grid {
 display: grid;
 grid-template-columns: repeat(2, 1fr);
@@ -148,23 +171,22 @@ gap: 12px;
 display: flex;
 flex-direction: column;
 gap: 5px;
-margin-bottom: 10px;
 }
-​.form-group.full {
+​.form-group.span-2 {
 grid-column: span 2;
 }
 ​label {
-font-size: 0.78rem;
-font-weight: 600;
+font-size: 0.75rem;
+font-weight: 700;
 color: var(--text-muted);
 text-transform: uppercase;
-letter-spacing: 0.3px;
+letter-spacing: 0.4px;
 }
 ​input, select {
 width: 100%;
 padding: 9px 12px;
 border: 1px solid var(--border-color);
-border-radius: 7px;
+border-radius: 8px;
 font-size: 0.88rem;
 font-family: inherit;
 color: var(--text-main);
@@ -173,16 +195,38 @@ transition: all 0.2s;
 }
 ​input:focus, select:focus {
 outline: none;
-border-color: var(--primary);
+border-color: var(--accent-blue);
 background-color: #ffffff;
 box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
 }
-​/* VOUCHER CONTAINER */
-.voucher-box {
+​/* QUICK CHIPS */
+.chip-group {
+display: flex;
+gap: 6px;
+margin-top: 6px;
+flex-wrap: wrap;
+}
+​.chip {
+background: #f1f5f9;
+border: 1px solid #cbd5e1;
+padding: 4px 10px;
+border-radius: 6px;
+font-size: 0.75rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.15s;
+}
+.chip:hover {
+background: var(--accent-blue);
+color: white;
+border-color: var(--accent-blue);
+}
+​/* VOUCHER TABLE */
+.voucher-container {
 background: #f8fafc;
 border: 1px dashed #cbd5e1;
 border-radius: 8px;
-padding: 14px;
+padding: 12px;
 }
 ​.voucher-row {
 display: flex;
@@ -190,53 +234,56 @@ gap: 8px;
 margin-bottom: 8px;
 align-items: center;
 }
-​/* PREVIEW CONTAINER */
+​/* RECEIPT PREVIEW STICKY */
 .preview-sticky {
 position: sticky;
-top: 90px;
+top: 85px;
 }
-​.receipt-frame {
-background: #1e293b;
-padding: 30px 20px;
+​.preview-box {
+background: #0f172a;
 border-radius: 16px;
+padding: 24px 20px;
 display: flex;
-justify-content: center;
+flex-direction: column;
 align-items: center;
-box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
 }
-​/* THERMAL RECEIPT STYLING (58mm Exact Representation) */
+​/* THERMAL RECEIPT REALISTIC LOOK (58mm Exact) */
 .receipt {
 width: 58mm;
 background: #ffffff;
-padding: 18px 10px;
+padding: 18px 10px 24px 10px;
 font-family: 'Space Mono', 'Courier New', monospace;
 font-size: 11px;
 line-height: 1.25;
 color: #000000;
-box-shadow: 0 0 12px rgba(0,0,0,0.2);
-border-radius: 2px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+position: relative;
 }
-​.receipt-header {
-text-align: center;
-margin-bottom: 6px;
+​/* Top Zigzag Pattern Simulator */
+.receipt::before {
+content: "";
+position: absolute;
+top: -6px;
+left: 0;
+width: 100%;
+height: 6px;
+background: radial-gradient(circle, transparent, transparent 50%, #ffffff 50%, #ffffff 100%);
+background-size: 10px 12px;
 }
 ​.receipt-logo {
 display: flex;
-justify-content: center;
+flex-direction: column;
 align-items: center;
-gap: 6px;
-margin-bottom: 4px;
+margin-bottom: 8px;
 }
 ​.receipt-logo svg {
-height: 22px;
-width: auto;
+width: 85px;
+height: auto;
+margin-bottom: 4px;
 }
-​.receipt-title {
-font-size: 13px;
-font-weight: 700;
-font-family: Arial, sans-serif;
-letter-spacing: 0.5px;
-}
+​.text-center { text-align: center; }
+.text-right { text-align: right; }
 ​.dashed-line {
 border-bottom: 1px dashed #000000;
 margin: 6px 0;
@@ -257,33 +304,34 @@ margin-bottom: 4px;
 text-align: center;
 margin-top: 8px;
 font-size: 10px;
-line-height: 1.2;
+line-height: 1.25;
 }
-​/* PRINT RULES */
+​/* PRINT DIRECTIVE (STRICTLY RECEIPT ONLY) */
 @media print {
 body * { visibility: hidden; }
-.receipt-frame, .receipt-frame * { visibility: visible; }
-.receipt-frame {
+.preview-box, .preview-box * { visibility: visible; }
+.preview-box {
 position: absolute;
 left: 0;
 top: 0;
 width: 100%;
 background: transparent !important;
 padding: 0 !important;
-margin: 0 !important;
+box-shadow: none !important;
 }
 .receipt {
 width: 100% !important;
 box-shadow: none !important;
 padding: 0 !important;
 }
+.receipt::before { display: none; }
 @page {
 size: auto;
 margin: 0mm;
 }
 }
-​@media (max-width: 850px) {
-.main-container {
+​@media (max-width: 900px) {
+.app-layout {
 grid-template-columns: 1fr;
 }
 .preview-sticky {
@@ -293,40 +341,45 @@ position: static;
 </style>
 </head>
 <body>
-​<!-- TOP NAVBAR -->
-<header class="navbar">
-<div class="brand">
-<!-- Authentic Pertamina Logo Vector (Color UI) -->
-<svg width="32" height="28" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<!-- Red Shape -->
-<path d="M40 10 L120 10 L80 70 L0 70 Z" fill="#ED1C24"/>
-<!-- Green Shape -->
-<path d="M30 85 L110 85 L70 145 L-10 145 Z" fill="#39B54A"/>
-<!-- Blue Shape (P Loop) -->
-<path d="M130 10 L200 10 C235 10 245 40 220 80 L195 120 C175 150 140 145 110 145 L70 145 L110 85 L135 85 C155 85 175 75 185 55 C192 38 180 10 150 10 Z" fill="#00A3E0"/>
+​<!-- APP NAVBAR -->
+<header class="app-bar">
+<div class="brand-group">
+<!-- Authentic Pertamina Vector Logo (Exact Shapes from Image) -->
+<div class="logo-container">
+<svg width="42" height="36" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Top Right Shape (Red) -->
+<path d="M 125,20 L 205,20 C 220,20 228,30 222,44 L 198,82 C 193,90 184,95 174,95 L 148,95 L 180,32 C 182,25 177,20 169,20 Z" fill="#ED1C24"/>
+<!-- Lower Left Shape (Blue) -->
+<path d="M 25,175 L 105,58 C 110,50 119,45 128,45 L 160,45 C 168,45 172,52 168,60 L 88,177 C 83,185 74,190 65,190 L 33,190 C 25,190 21,183 25,175 Z" fill="#00A3E0"/>
+<!-- Lower Right Shape (Green) -->
+<path d="M 122,175 L 170,105 C 175,98 184,93 193,93 L 222,93 C 230,93 234,100 230,108 L 182,177 C 177,185 168,190 159,190 L 130,190 C 122,190 118,183 122,175 Z" fill="#39B54A"/>
 </svg>
-<div>
-<span class="brand-title">Pertamina POS & Voucher</span>
-<span class="brand-badge">Professional Edition</span>
+</div>
+<div class="brand-info">
+<h1>Pertamina POS & Receipt Engine</h1>
+<p>Sistem Pengatur & Cetak Struk SPBU Thermal 58mm</p>
 </div>
 </div>
-<div class="nav-actions">
-<button class="btn btn-secondary" onclick="setWaktuSekarang()">
-⏱️ Set Jam Sekarang
+​<div class="header-actions">
+<div class="status-pill">
+<span class="status-dot"></span> Printer Thermal Ready
+</div>
+<button class="btn btn-outline" onclick="setWaktuSekarang()">
+⏱️ Jam Sekarang
 </button>
 <button class="btn btn-primary" onclick="window.print()">
 🖨️ Cetak Struk
 </button>
 </div>
 </header>
-​<!-- MAIN CONTAINER -->
-<main class="main-container">
-​<!-- LEFT PANEL: FORM EDITOR -->
-<div class="editor-panel">
-​<!-- CARD 1: LOKASI & HEADER SPBU -->
+​<!-- MAIN APP LAYOUT -->
+<main class="app-layout">
+​<!-- LEFT COLUMN: FORM CONTROLS -->
+<div class="editor-column">
+​<!-- CARD 1: INFORMASI SPBU -->
 <div class="card">
 <div class="card-header">
-<span class="card-title">🏢 Informasi SPBU & Sesi</span>
+<span class="card-title">🏪 Informasi SPBU & Sesi</span>
 </div>
 <div class="form-grid">
 <div class="form-group">
@@ -337,7 +390,7 @@ position: static;
 <label>Nama SPBU</label>
 <input type="text" id="namaSpbu" value="SPBU BSD" oninput="updateReceipt()">
 </div>
-<div class="form-group full">
+<div class="form-group span-2">
 <label>Alamat SPBU</label>
 <input type="text" id="alamatSpbu" value="Jl. Letjend Sutopo Kav 2 A" oninput="updateReceipt()">
 </div>
@@ -349,16 +402,16 @@ position: static;
 <label>No. Transaksi</label>
 <input type="text" id="noTrans" value="2040253" oninput="updateReceipt()">
 </div>
-<div class="form-group full">
+<div class="form-group span-2">
 <label>Waktu Transaksi (DD/MM/YYYY HH:MM:SS)</label>
 <input type="text" id="waktu" value="24/08/2026 11:37:53" oninput="updateReceipt()">
 </div>
 </div>
 </div>
-​<!-- CARD 2: TRANSAKSI BBM -->
+​<!-- CARD 2: DETAIL BBM -->
 <div class="card">
 <div class="card-header">
-<span class="card-title">⛽ Detail Pembelian BBM</span>
+<span class="card-title">⛽ Transaksi Bahan Bakar</span>
 </div>
 <div class="form-grid">
 <div class="form-group">
@@ -380,8 +433,15 @@ position: static;
 <input type="number" id="hargaLiter" value="21150" oninput="hitungVolumeAuto()">
 </div>
 <div class="form-group">
-<label>Total Transaksi (Rp)</label>
+<label>Total Bayar (Rp)</label>
 <input type="number" id="totalHarga" value="350000" oninput="hitungVolumeAuto()">
+<div class="chip-group">
+<span class="chip" onclick="quickTotal(50000)">50rb</span>
+<span class="chip" onclick="quickTotal(100000)">100rb</span>
+<span class="chip" onclick="quickTotal(200000)">200rb</span>
+<span class="chip" onclick="quickTotal(350000)">350rb</span>
+<span class="chip" onclick="quickTotal(500000)">500rb</span>
+</div>
 </div>
 <div class="form-group">
 <label>Volume (Liter)</label>
@@ -393,50 +453,47 @@ position: static;
 </div>
 </div>
 </div>
-​<!-- CARD 3: VOUCHER PERTAMINA -->
+​<!-- CARD 3: VOUCHER -->
 <div class="card">
 <div class="card-header">
-<span class="card-title">🎟️ Rincian Voucher</span>
+<span class="card-title">🎟️ Rincian Kode Voucher</span>
 <button class="btn btn-success" onclick="addVoucherRow()">+ Tambah Voucher</button>
 </div>
-<div class="voucher-box">
-<div id="voucherContainer"></div>
+<div class="voucher-container">
+<div id="voucherList"></div>
 </div>
 </div>
 ​</div>
-​<!-- RIGHT PANEL: STICKY RECEIPT PREVIEW -->
-<div class="preview-panel">
+​<!-- RIGHT COLUMN: STICKY RECEIPT PREVIEW -->
+<div class="preview-column">
 <div class="preview-sticky">
-<div class="card-header" style="background:#fff; padding: 12px 16px; border-radius: 12px 12px 0 0; margin-bottom: 0;">
-<span class="card-title">📄 Pratinjau Struk (58mm)</span>
-<span style="font-size: 0.75rem; color: var(--text-muted);">Siap Cetak Thermal</span>
-</div>
-<div class="receipt-frame">
-<div class="receipt" id="receiptOutput">
-​<!-- RECEIPT LOGO & HEADER -->
-<div class="receipt-header">
+<div class="preview-box">
+​<div class="receipt" id="receiptOutput">
+​<!-- LOGO ASLI PERTAMINA (MONOCHROME UNTUK PRINTER THERMAL) -->
 <div class="receipt-logo">
-<!-- Authentic Pertamina Vector Emblem Monochrome for Thermal Print -->
-<svg width="24" height="20" viewBox="0 0 200 180" fill="#000000">
-<path d="M40 10 L120 10 L80 70 L0 70 Z"/>
-<path d="M30 85 L110 85 L70 145 L-10 145 Z"/>
-<path d="M130 10 L200 10 C235 10 245 40 220 80 L195 120 C175 150 140 145 110 145 L70 145 L110 85 L135 85 C155 85 175 75 185 55 C192 38 180 10 150 10 Z"/>
+<svg width="75" height="42" viewBox="0 0 250 200" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+<!-- Shape 1 Top Right -->
+<path d="M 125,20 L 205,20 C 220,20 228,30 222,44 L 198,82 C 193,90 184,95 174,95 L 148,95 L 180,32 C 182,25 177,20 169,20 Z"/>
+<!-- Shape 2 Lower Left -->
+<path d="M 25,175 L 105,58 C 110,50 119,45 128,45 L 160,45 C 168,45 172,52 168,60 L 88,177 C 83,185 74,190 65,190 L 33,190 C 25,190 21,183 25,175 Z"/>
+<!-- Shape 3 Lower Right -->
+<path d="M 122,175 L 170,105 C 175,98 184,93 193,93 L 222,93 C 230,93 234,100 230,108 L 182,177 C 177,185 168,190 159,190 L 130,190 C 122,190 118,183 122,175 Z"/>
 </svg>
-<span class="receipt-title">PERTAMINA</span>
+<div style="font-weight: 800; font-size: 13px; font-family: Arial, sans-serif; letter-spacing: 0.5px;">PERTAMINA</div>
 </div>
-<div id="outKodeSpbu">3115301</div>
-<div id="outNamaSpbu">SPBU BSD</div>
-<div id="outAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
-</div>
-​<div class="flex-row">
+​<!-- HEADER TEXT -->
+<div class="text-center" id="outKodeSpbu">3115301</div>
+<div class="text-center" id="outNamaSpbu">SPBU BSD</div>
+<div class="text-center" id="outAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
+​<div style="margin-top: 4px;">
 <span>Shift: <span id="outShift">1</span></span>
-<span>No. Trans: <span id="outNoTrans">2040253</span></span>
+<span style="float: right;">No. Trans: <span id="outNoTrans">2040253</span></span>
 </div>
 <div>
 <span>Waktu: <span id="outWaktu">24/08/2026 11:37:53</span></span>
 </div>
 ​<div class="dashed-line"></div>
-​<!-- DETAIL BOUGHT -->
+​<!-- DETAIL TRANSAKSI -->
 <div>Pulau/Pompa: <span id="outPompa">1</span></div>
 <div>Nama Produk: <span id="outProduk">PERTAMINA_DEX</span></div>
 <div>Harga/Liter: Rp. <span id="outHargaLiter">21,150</span></div>
@@ -460,7 +517,7 @@ berbagai promo dan program
 menarik lainnya.
 </div>
 ​</div>
-</div>
+​</div>
 </div>
 </div>
 ​</main>
@@ -488,6 +545,10 @@ const min = String(now.getMinutes()).padStart(2, '0');
 const ss = String(now.getSeconds()).padStart(2, '0');
 ​document.getElementById('waktu').value = ${dd}/${mm}/${yyyy} ${hh}:${min}:${ss};
 updateReceipt();
+}
+​function quickTotal(val) {
+document.getElementById('totalHarga').value = val;
+hitungVolumeAuto();
 }
 ​function onProductSelect() {
 const select = document.getElementById('produk');
@@ -519,29 +580,26 @@ vouchers[index][key] = value;
 updateReceipt();
 }
 ​function renderVoucherForm() {
-const container = document.getElementById('voucherContainer');
+const container = document.getElementById('voucherList');
 container.innerHTML = '';
 ​vouchers.forEach((item, idx) => {
 const row = document.createElement('div');
 row.className = 'voucher-row';
-row.innerHTML = <input type="text" placeholder="Kode Voucher" value="${item.code}" oninput="updateVoucherItem(${idx}, 'code', this.value)"> <input type="number" placeholder="Nominal" value="${item.val}" style="width: 130px;" oninput="updateVoucherItem(${idx}, 'val', this.value)"> <button class="btn btn-danger" onclick="removeVoucherRow(${idx})">✕</button>;
+row.innerHTML = <input type="text" placeholder="Kode Voucher" value="${item.code}" oninput="updateVoucherItem(${idx}, 'code', this.value)"> <input type="number" placeholder="Nominal" value="${item.val}" style="width: 120px;" oninput="updateVoucherItem(${idx}, 'val', this.value)"> <button class="btn-danger-sm" onclick="removeVoucherRow(${idx})">✕</button>;
 container.appendChild(row);
 });
 }
 ​function updateReceipt() {
-// Header Info
 document.getElementById('outKodeSpbu').innerText = document.getElementById('kodeSpbu').value;
 document.getElementById('outNamaSpbu').innerText = document.getElementById('namaSpbu').value;
 document.getElementById('outAlamatSpbu').innerText = document.getElementById('alamatSpbu').value;
 document.getElementById('outShift').innerText = document.getElementById('shift').value;
 document.getElementById('outNoTrans').innerText = document.getElementById('noTrans').value;
 document.getElementById('outWaktu').innerText = document.getElementById('waktu').value;
-​// Purchase Info
-document.getElementById('outPompa').innerText = document.getElementById('pompa').value;
+​document.getElementById('outPompa').innerText = document.getElementById('pompa').value;
 ​const produkVal = document.getElementById('produk').value;
 document.getElementById('outProduk').innerText = produkVal;
-​// Footer Text Formatting
-let ftProd = 'Pertamina Dex';
+​let ftProd = 'Pertamina Dex';
 if (produkVal.includes('PERTALITE')) ftProd = 'Pertalite';
 else if (produkVal.includes('PERTAMAX_TURBO')) ftProd = 'Pertamax Turbo';
 else if (produkVal.includes('PERTAMAX')) ftProd = 'Pertamax';
@@ -551,8 +609,7 @@ document.getElementById('outFooterProduk').innerText = ftProd;
 document.getElementById('outVolume').innerText = document.getElementById('volume').value;
 document.getElementById('outTotalHarga').innerText = formatRibuan(document.getElementById('totalHarga').value);
 document.getElementById('outOperator').innerText = document.getElementById('operator').value.toUpperCase();
-​// Render Vouchers List
-const listContainer = document.getElementById('outVouchersList');
+​const listContainer = document.getElementById('outVouchersList');
 listContainer.innerHTML = '';
 ​vouchers.forEach(v => {
 if (v.code.trim() !== '') {
@@ -567,7 +624,7 @@ listContainer.appendChild(valEl);
 }
 });
 }
-​// Initialize App
+​// Init App
 renderVoucherForm();
 updateReceipt();
 </script>
