@@ -319,7 +319,7 @@
                         <!-- Header Logo & SPBU -->
                         <div class="text-center space-y-0.5 mb-1.5">
                             
-                            <!-- PERBAIKAN LOGO & TEKS PERTAMINA (IKON LEBIH BESAR DARI TEKS, GAYA TEKS MONOSPACE MONOKROM ASLI) -->
+                            <!-- PERBAIKAN LOGO & TEKS PERTAMINA -->
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
                                 <svg class="w-7 h-6 text-black fill-current shrink-0" viewBox="10 15 170 110" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
@@ -385,9 +385,9 @@
                         <!-- Garis Pembatas Footer -->
                         <div class="border-b border-dashed border-black my-1.5"></div>
 
-                        <!-- Footer Catatan Struk -->
+                        <!-- Footer Catatan Struk (NAMA PRODUK DINAMISsesuai Pilihan) -->
                         <div class="text-center text-[9.5px] space-y-0.5 leading-tight px-0.5 pt-0.5">
-                            <p>Terima Kasih telah menggunakan produk Pertamina Dex, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
+                            <p>Terima Kasih telah menggunakan produk <span id="viewFooterProduk">Pertamina Dex</span>, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
                         </div>
 
                     </div>
@@ -428,6 +428,15 @@
             '0000e025-0000-1000-8000-00805f9b34fb',
             '0000ff00-0000-1000-8000-00805f9b34fb'
         ];
+
+        // Format Teks Produk untuk Footer (Mengubah "PERTAMINA_DEX" menjadi "Pertamina Dex", "PERTAMAX" menjadi "Pertamax", dsb)
+        function formatProdukFooter(namaProduk) {
+            if (!namaProduk) return '';
+            // Ganti underscore dengan spasi
+            let clean = namaProduk.replace(/_/g, ' ');
+            // Ubah Format Title Case (Huruf Depan Kapital, Sisanya Kecil)
+            return clean.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+        }
 
         // Formatter Angka dengan Koma
         function formatNumber(num) {
@@ -559,7 +568,11 @@
             document.getElementById('viewPompa').innerText = document.getElementById('inputPompa').value || '1';
             
             const produkSelect = document.getElementById('selectProduk');
-            document.getElementById('viewProduk').innerText = produkSelect.value;
+            const produkVal = produkSelect.value;
+            document.getElementById('viewProduk').innerText = produkVal;
+
+            // UPDATE TEKS FOOTER DINAMIS SESUAI PRODUK
+            document.getElementById('viewFooterProduk').innerText = formatProdukFooter(produkVal);
 
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             document.getElementById('viewHarga').innerText = formatNumber(harga);
@@ -787,9 +800,12 @@
 
             pushStr("--------------------------------\n");
 
+            // Dinamis sesuai produk pada cetakan Bluetooth
+            const namaProdukFooter = formatProdukFooter(produk);
+
             push([0x1B, 0x61, 0x01]);
-            pushStr("Terima Kasih telah menggunakan\n");
-            pushStr("produk Pertamina Dex, Gunakan\n");
+            pushStr(`Terima Kasih telah menggunakan\n`);
+            pushStr(`produk ${namaProdukFooter}, Gunakan\n`);
             pushStr("MyPertamina untuk menikmati\n");
             pushStr("berbagai promo dan program\n");
             pushStr("menarik lainnya.\n");
@@ -874,3 +890,4 @@
     </script>
 </body>
 </html>
+
