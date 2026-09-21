@@ -121,9 +121,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <!-- Mini Logo Header -->
-                    <svg class="w-full h-full text-red-500 fill-current" viewBox="10 15 170 110">
-                        <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
+                    <!-- Mini Logo Header (Updated with new precise current Pertamina top shape) -->
+                    <svg class="w-full h-full text-red-500 fill-current" viewBox="0 0 180 120">
+                        <path d="M 105 15 L 168 18 C 177 18 182 23 175 33 L 138 78 L 93 78 Z" />
                         <path d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
                         <path d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
                     </svg>
@@ -339,8 +339,9 @@
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <svg class="w-7 h-6 text-black fill-current shrink-0" viewBox="10 15 170 110" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
+                                <!-- UPDATED EXACT CURRENT PERTAMINA LOGO ICON matching user reference -->
+                                <svg class="w-7 h-6 text-black fill-current shrink-0" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 105 15 L 168 18 C 177 18 182 23 175 33 L 138 78 L 93 78 Z" />
                                     <path d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
                                     <path d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
                                 </svg>
@@ -878,7 +879,7 @@
             } catch (err) {
                 console.error("Print Error:", err);
                 alert("Gagal mencetak struk via Bluetooth: " + err.message);
-                document.getElementById('btBarText').innerText = `Status Bluetooth: Gagal cetak (${err.message})`;
+                document.getElementById('btBarTest').innerText = `Status Bluetooth: Gagal cetak (${err.message})`;
             }
         }
 
