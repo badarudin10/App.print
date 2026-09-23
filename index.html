@@ -292,18 +292,18 @@
                     <!-- KERTAS STRUK -->
                     <div id="print-section" class="thermal-paper receipt-font p-3 text-[11px] leading-snug select-none">
                         
-                        <!-- Header Logo & SPBU (Logo di sebelah kiri teks Pertamina horizontal, logo sedikit lebih besar) -->
+                        <!-- Header Logo & SPBU (Logo sejajar horizontal di sebelah kiri teks PERTAMINA) -->
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- Logo Panah Monokrom (Sedikit Lebih Besar) -->
-                                <svg class="w-10 h-9 text-black fill-current shrink-0" viewBox="10 15 170 110" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Logo Panah Monokrom -->
+                                <svg class="w-8 h-7 text-black fill-current shrink-0" viewBox="10 15 170 110" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
                                     <path d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
                                     <path d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
                                 </svg>
                                 <!-- Teks Pertamina Horizontal di Samping Kanan Logo -->
-                                <span class="receipt-font font-black text-[14px] tracking-wider leading-none uppercase">PERTAMINA</span>
+                                <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
 
                             <div class="font-bold text-[12px] tracking-tight" id="viewKodeSpbu">3115301</div>
@@ -317,7 +317,7 @@
                                 <span>Shift: <span id="viewShift">1</span></span>
                                 <span>No. Trans: <span id="viewNoTrans">2040253</span></span>
                             </div>
-                            <div>Waktu: <span id="viewWaktu">23/09/2026 21:55:31</span></div>
+                            <div>Waktu: <span id="viewWaktu">23/09/2026 22:04:11</span></div>
                         </div>
 
                         <div class="border-b border-dashed border-black my-1.5"></div>
@@ -381,7 +381,7 @@
         </div>
     </main>
 
-    <!-- Canvas Tersembunyi untuk Rasterisasi Logo Bitmap ESC/POS -->
+    <!-- Canvas Tersembunyi untuk Rasterisasi Logo & Teks Pertamina Horizontal -->
     <canvas id="logoCanvas" style="display:none;"></canvas>
 
     <!-- Script Logika & Interaktivitas -->
@@ -411,7 +411,6 @@
             const btn = document.getElementById('btnTimeMode');
             const icon = document.getElementById('timeModeIcon');
             const text = document.getElementById('timeModeText');
-            const inputWaktu = document.getElementById('inputWaktu');
 
             if (isLiveClockActive) {
                 btn.className = "text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold transition flex items-center gap-1";
@@ -629,28 +628,35 @@
             gattServer = null;
         }
 
-        // FUNGSI KONVERSI LOGO SVG MENJADI BITMAP RASTER ESC/POS
-        async function createLogoBitmapCommands() {
+        // FUNGSI GABUNGAN: RASTERISASI LOGO & TEKS PERTAMINA SECARA HORIZONTAL DALAM SATU KANVAS BITMAP
+        async function createHeaderBitmapCommands() {
             return new Promise((resolve) => {
                 const canvas = document.getElementById('logoCanvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Ukuran bitmap (Lebar 120px, Tinggi 36px agar proporsional di kertas 58mm)
-                const targetWidth = 120;
-                const targetHeight = 36;
+                // Lebar kanvas 384px (lebar efektif kertas thermal 58mm pada resolusi 8 dots/mm)
+                const targetWidth = 384;
+                const targetHeight = 52;
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
 
+                // Background putih bersih
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 15 170 110" width="${targetWidth}" height="${targetHeight}">
-                    <path fill="black" d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
-                    <path fill="black" d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
-                    <path fill="black" d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
+                // Buat SVG gabungan logo (kiri) dan teks PERTAMINA (kanan) dalam satu baris horizontal
+                const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
+                    <!-- Logo Icon Panah di sebelah kiri -->
+                    <g transform="translate(100, 6) scale(0.35)">
+                        <path fill="black" d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
+                        <path fill="black" d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
+                        <path fill="black" d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
+                    </g>
+                    <!-- Teks PERTAMINA di sebelah kanan logo secara horizontal -->
+                    <text x="165" y="36" font-family="Courier New, monospace" font-weight="900" font-size="28" letter-spacing="3" fill="black">PERTAMINA</text>
                 </svg>`;
 
-                const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const blob = new Blob([combinedSvgString], { type: 'image/svg+xml;charset=utf-8' });
                 const URL = window.URL || window.webkitURL || window;
                 const blobURL = URL.createObjectURL(blob);
                 const img = new Image();
@@ -738,16 +744,11 @@
             // Init Printer
             push([0x1B, 0x40]);
 
-            // --- HEADER: CETAK LOGO BITMAP DI TENGAH ---
+            // --- HEADER: CETAK LOGO & TEKS PERTAMINA SEBAGAI SATU KANVAS RASTER HORIZONTAL ---
             push([0x1B, 0x61, 0x01]); // Center alignment
-            const logoRaster = await createLogoBitmapCommands();
-            push(logoRaster);
+            const headerRaster = await createHeaderBitmapCommands();
+            push(headerRaster);
             pushStr("\n");
-
-            // --- NAMA PERTAMINA DIBAWAH LOGO (UKURAN NORMAL/PROPOSIONAL) ---
-            push([0x1B, 0x45, 0x01]); // Bold ON
-            pushStr("PERTAMINA\n");
-            push([0x1B, 0x45, 0x00]); // Bold OFF
 
             const kodeSpbu = document.getElementById('inputKodeSpbu').value || '-';
             const namaSpbu = document.getElementById('inputNamaSpbu').value || '-';
@@ -800,7 +801,7 @@
                         pushStr("--------------------------------\n");
                         hasVoucher = true;
                     }
-                    pushStr(formatEscPosRow(code.toUpperCase(), amt));
+                        pushStr(formatEscPosRow(code.toUpperCase(), amt));
                 }
             });
 
@@ -829,7 +830,7 @@
                 void paper.offsetWidth;
                 paper.classList.add('printing-animation');
 
-                document.getElementById('btBarText').innerText = "Status Bluetooth: Mengirim data logo bitmap & struk...";
+                document.getElementById('btBarText').innerText = "Status Bluetooth: Mengirim data header bitmap & struk...";
 
                 const data = await generateEscPosCommands();
                 const CHUNK_SIZE = 100;
@@ -844,7 +845,7 @@
                     await new Promise(resolve => setTimeout(resolve, 30));
                 }
 
-                document.getElementById('btBarText').innerHTML = `Status Bluetooth: <span class="text-emerald-400 font-bold">Struk & Logo Berhasil Dicetak!</span>`;
+                document.getElementById('btBarText').innerHTML = `Status Bluetooth: <span class="text-emerald-400 font-bold">Struk & Logo Berhasil Dicetak Sejajar!</span>`;
 
             } catch (err) {
                 console.error("Print Error:", err);
@@ -880,4 +881,3 @@
     </script>
 </body>
 </html>
-
