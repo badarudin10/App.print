@@ -96,10 +96,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <svg class="w-full h-full text-red-500 fill-current" viewBox="10 15 170 110">
-                        <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
-                        <path d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
-                        <path d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
+                    <svg class="w-full h-full text-red-500 fill-current" viewBox="0 0 180 140">
+                        <path d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
+                        <path d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
+                        <path d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
                     </svg>
                 </div>
                 <div>
@@ -296,11 +296,11 @@
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- Logo Panah Monokrom -->
-                                <svg class="w-8 h-7 text-black fill-current shrink-0" viewBox="10 15 170 110" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
-                                    <path d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
-                                    <path d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
+                                <!-- Logo Presisi Sesuai Referensi -->
+                                <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
+                                    <path d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
+                                    <path d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
                                 </svg>
                                 <!-- Teks Pertamina Horizontal di Samping Kanan Logo -->
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
@@ -381,7 +381,7 @@
         </div>
     </main>
 
-    <!-- Canvas Tersembunyi untuk Rasterisasi Logo & Teks Pertamina Horizontal -->
+    <!-- Canvas Tersembunyi untuk Rasterisasi Logo Presisi & Teks Pertamina Horizontal -->
     <canvas id="logoCanvas" style="display:none;"></canvas>
 
     <!-- Script Logika & Interaktivitas -->
@@ -628,13 +628,12 @@
             gattServer = null;
         }
 
-        // FUNGSI GABUNGAN: RASTERISASI LOGO & TEKS PERTAMINA SECARA HORIZONTAL DALAM SATU KANVAS BITMAP
+        // FUNGSI GABUNGAN: RASTERISASI LOGO PRESISI & TEKS PERTAMINA SECARA HORIZONTAL DALAM SATU KANVAS BITMAP
         async function createHeaderBitmapCommands() {
             return new Promise((resolve) => {
                 const canvas = document.getElementById('logoCanvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Lebar kanvas 384px (lebar efektif kertas thermal 58mm pada resolusi 8 dots/mm)
                 const targetWidth = 384;
                 const targetHeight = 52;
                 canvas.width = targetWidth;
@@ -644,13 +643,13 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                // Buat SVG gabungan logo (kiri) dan teks PERTAMINA (kanan) dalam satu baris horizontal
+                // SVG dengan bentuk logo yang sudah disesuaikan persis seperti referensi
                 const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
-                    <!-- Logo Icon Panah di sebelah kiri -->
-                    <g transform="translate(100, 6) scale(0.35)">
-                        <path fill="black" d="M 117 18 L 168 18 C 177 18 182 22 178 31 L 163 50 L 98 50 Z" />
-                        <path fill="black" d="M 93 58 L 156 58 L 142 80 C 139 86 133 88 124 88 L 74 88 Z" />
-                        <path fill="black" d="M 86 58 L 47 120 L 12 120 L 36 78 C 40 70 46 58 58 58 Z" />
+                    <!-- Logo Icon Panah Presisi di sebelah kiri -->
+                    <g transform="translate(95, 6) scale(0.35)">
+                        <path fill="black" d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
+                        <path fill="black" d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
+                        <path fill="black" d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
                     </g>
                     <!-- Teks PERTAMINA di sebelah kanan logo secara horizontal -->
                     <text x="165" y="36" font-family="Courier New, monospace" font-weight="900" font-size="28" letter-spacing="3" fill="black">PERTAMINA</text>
@@ -682,7 +681,6 @@
                                     const g = pixels[offset + 1];
                                     const b = pixels[offset + 2];
                                     const avg = (r + g + b) / 3;
-                                    // Hitam jika di bawah 128
                                     if (avg < 128) {
                                         byte |= (1 << (7 - bit));
                                     }
@@ -692,7 +690,6 @@
                         }
                     }
 
-                    // Perintah ESC/POS Raster Bit Image: GS v 0 (0x1D 0x76 0x30 0x00)
                     const xL = widthBytes & 0xFF;
                     const xH = (widthBytes >> 8) & 0xFF;
                     const yL = targetHeight & 0xFF;
@@ -744,7 +741,7 @@
             // Init Printer
             push([0x1B, 0x40]);
 
-            // --- HEADER: CETAK LOGO & TEKS PERTAMINA SEBAGAI SATU KANVAS RASTER HORIZONTAL ---
+            // --- HEADER: CETAK LOGO PRESISI & TEKS PERTAMINA SEBAGAI SATU KANVAS RASTER HORIZONTAL ---
             push([0x1B, 0x61, 0x01]); // Center alignment
             const headerRaster = await createHeaderBitmapCommands();
             push(headerRaster);
@@ -801,7 +798,7 @@
                         pushStr("--------------------------------\n");
                         hasVoucher = true;
                     }
-                        pushStr(formatEscPosRow(code.toUpperCase(), amt));
+                    pushStr(formatEscPosRow(code.toUpperCase(), amt));
                 }
             });
 
@@ -830,7 +827,7 @@
                 void paper.offsetWidth;
                 paper.classList.add('printing-animation');
 
-                document.getElementById('btBarText').innerText = "Status Bluetooth: Mengirim data header bitmap & struk...";
+                document.getElementById('btBarText').innerText = "Status Bluetooth: Mengirim data logo presisi & struk...";
 
                 const data = await generateEscPosCommands();
                 const CHUNK_SIZE = 100;
@@ -845,7 +842,7 @@
                     await new Promise(resolve => setTimeout(resolve, 30));
                 }
 
-                document.getElementById('btBarText').innerHTML = `Status Bluetooth: <span class="text-emerald-400 font-bold">Struk & Logo Berhasil Dicetak Sejajar!</span>`;
+                document.getElementById('btBarText').innerHTML = `Status Bluetooth: <span class="text-emerald-400 font-bold">Struk & Logo Presisi Berhasil Dicetak!</span>`;
 
             } catch (err) {
                 console.error("Print Error:", err);
@@ -881,3 +878,4 @@
     </script>
 </body>
 </html>
+
