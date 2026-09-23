@@ -96,10 +96,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <svg class="w-full h-full text-red-500 fill-current" viewBox="0 0 180 140">
-                        <path d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
-                        <path d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
-                        <path d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
+                    <!-- Ikon Logo Pertamina Akurat di Navbar -->
+                    <svg class="w-full h-full fill-current text-red-500" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 10,70 Q 5,45 22,12 Q 38,15 32,55 Q 30,70 10,70 Z"/>
+                        <path d="M 38,70 Q 36,42 53,12 Q 70,15 63,55 Q 60,70 38,70 Z"/>
+                        <path d="M 68,52 Q 65,28 82,2 Q 98,5 93,42 Q 90,55 68,52 Z"/>
                     </svg>
                 </div>
                 <div>
@@ -242,7 +243,7 @@
 
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Nama Operator</label>
-                        <input type="text" id="inputOperator" value="ANDI" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 uppercase focus:outline-none focus:border-red-500">
+                        <input type="text" id="inputOperator" value="BADARUDIN" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 uppercase focus:outline-none focus:border-red-500">
                     </div>
                 </div>
 
@@ -296,10 +297,11 @@
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
-                                    <path d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
-                                    <path d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
+                                <!-- Ikon Logo Pertamina Baru yang Akurat -->
+                                <svg class="w-10 h-7 text-black fill-current shrink-0" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 10,70 Q 5,45 22,12 Q 38,15 32,55 Q 30,70 10,70 Z"/>
+                                    <path d="M 38,70 Q 36,42 53,12 Q 70,15 63,55 Q 60,70 38,70 Z"/>
+                                    <path d="M 68,52 Q 65,28 82,2 Q 98,5 93,42 Q 90,55 68,52 Z"/>
                                 </svg>
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
@@ -315,7 +317,7 @@
                                 <span>Shift: <span id="viewShift">1</span></span>
                                 <span>No. Trans: <span id="viewNoTrans">2040253</span></span>
                             </div>
-                            <div>Waktu: <span id="viewWaktu">23/09/2026 22:04:11</span></div>
+                            <div>Waktu: <span id="viewWaktu">23/09/2026 22:32:40</span></div>
                         </div>
 
                         <div class="border-b border-dashed border-black my-1.5"></div>
@@ -344,7 +346,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span>Operator</span>
-                                <span>: <span id="viewOperator">ANDI</span></span>
+                                <span>: <span id="viewOperator">BADARUDIN</span></span>
                             </div>
                         </div>
 
@@ -639,13 +641,14 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
+                // SVG dengan bentuk geometri logo Pertamina yang presisi (tiga kelopak jajar genjang melengkung)
                 const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
-                    <g transform="translate(95, 6) scale(0.35)">
-                        <path fill="black" d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
-                        <path fill="black" d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
-                        <path fill="black" d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
+                    <g transform="translate(75, 4) scale(0.65)">
+                        <path fill="black" d="M 10,70 Q 5,45 22,12 Q 38,15 32,55 Q 30,70 10,70 Z"/>
+                        <path fill="black" d="M 38,70 Q 36,42 53,12 Q 70,15 63,55 Q 60,70 38,70 Z"/>
+                        <path fill="black" d="M 68,52 Q 65,28 82,2 Q 98,5 93,42 Q 90,55 68,52 Z"/>
                     </g>
-                    <text x="165" y="36" font-family="Courier New, monospace" font-weight="900" font-size="28" letter-spacing="3" fill="black">PERTAMINA</text>
+                    <text x="165" y="36" font-family="Courier New, monospace" font-weight="900" font-size="26" letter-spacing="3" fill="black">PERTAMINA</text>
                 </svg>`;
 
                 const blob = new Blob([combinedSvgString], { type: 'image/svg+xml;charset=utf-8' });
