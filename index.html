@@ -96,8 +96,42 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <!-- LOGO BASE64 UNTUK HEADER WEB -->
-                    <img id="webLogo" src="" alt="Pertamina" class="w-full h-full object-contain">
+                    <!-- SVG LOGO BARU (Lebih Presisi) -->
+                    <svg class="w-full h-full fill-current text-red-500" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Bidang Kiri Bawah -->
+                        <path d="M 8,68 
+                                 L 32,20 
+                                 C 33,18 35,17 37,17 
+                                 L 52,17 
+                                 C 54,17 55,19 54,21 
+                                 L 36,55 
+                                 C 35,58 32,60 29,60 
+                                 L 8,60 
+                                 C 6,60 5,59 6,57 
+                                 Z"/>
+                        <!-- Bidang Kanan Atas -->
+                        <path d="M 42,35 
+                                 L 52,15 
+                                 C 53,13 55,12 57,12 
+                                 L 72,12 
+                                 C 74,12 75,14 74,16 
+                                 L 64,36 
+                                 C 63,38 61,39 59,39 
+                                 L 44,39 
+                                 C 42,39 41,37 42,35 
+                                 Z"/>
+                        <!-- Bidang Kanan Bawah -->
+                        <path d="M 62,68 
+                                 L 78,36 
+                                 C 79,34 81,33 83,33 
+                                 L 92,33 
+                                 C 94,33 95,35 94,37 
+                                 L 84,57 
+                                 C 83,60 80,62 77,62 
+                                 L 64,62 
+                                 C 62,62 61,60 62,58 
+                                 Z"/>
+                    </svg>
                 </div>
                 <div>
                     <h1 class="text-base font-bold text-white leading-tight flex items-center gap-2">
@@ -293,8 +327,12 @@
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- LOGO BASE64 UNTUK PREVIEW STRUK -->
-                                <img id="receiptLogo" src="" alt="Pertamina" class="h-7 object-contain">
+                                <!-- SVG LOGO BARU (Lebih Presisi) -->
+                                <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 8,68 L 32,20 C 33,18 35,17 37,17 L 52,17 C 54,17 55,19 54,21 L 36,55 C 35,58 32,60 29,60 L 8,60 C 6,60 5,59 6,57 Z"/>
+                                    <path d="M 42,35 L 52,15 C 53,13 55,12 57,12 L 72,12 C 74,12 75,14 74,16 L 64,36 C 63,38 61,39 59,39 L 44,39 C 42,39 41,37 42,35 Z"/>
+                                    <path d="M 62,68 L 78,36 C 79,34 81,33 83,33 L 92,33 C 94,33 95,35 94,37 L 84,57 C 83,60 80,62 77,62 L 64,62 C 62,62 61,60 62,58 Z"/>
+                                </svg>
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
 
@@ -378,15 +416,6 @@
 
     <!-- Script Logika & Interaktivitas -->
     <script>
-        // =================================================================
-        // LOGO BASE64 YANG SUDAH DIPROSES (HITAM PUTIH, TRANSPARAN)
-        // =================================================================
-        const LOGO_BASE64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF8WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDI2LTA5LTI0VDAwOjIyOjQzKzA3OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI2LTA5LTI0VDAwOjIyOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyNi0wOS0yNFQwMDoyMjo0MyswNzowMCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpjYjY0YjQ5Yi1jYjY0LTRiOTktYjY0Yi05YjY0YjY0YjY0YiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpjYjY0YjQ5Yi1jYjY0LTRiOTktYjY0Yi05YjY0YjY0YjY0YiIg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==";
-
-        // Set gambar logo ke header web dan preview struk
-        document.getElementById('webLogo').src = LOGO_BASE64;
-        document.getElementById('receiptLogo').src = LOGO_BASE64;
-
         let isLiveClockActive = true;
         let clockInterval = null;
 
@@ -642,29 +671,25 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                // Menggunakan Gambar Base64 yang di-load dari elemen img
+                // Path SVG logo asli dengan kurva lengkungan atas yang disesuaikan
+                const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
+                    <g transform="translate(60, 1) scale(0.65)">
+                        <path fill="black" d="M 8,68 L 32,20 C 33,18 35,17 37,17 L 52,17 C 54,17 55,19 54,21 L 36,55 C 35,58 32,60 29,60 L 8,60 C 6,60 5,59 6,57 Z"/>
+                        <path fill="black" d="M 42,35 L 52,15 C 53,13 55,12 57,12 L 72,12 C 74,12 75,14 74,16 L 64,36 C 63,38 61,39 59,39 L 44,39 C 42,39 41,37 42,35 Z"/>
+                        <path fill="black" d="M 62,68 L 78,36 C 79,34 81,33 83,33 L 92,33 C 94,33 95,35 94,37 L 84,57 C 83,60 80,62 77,62 L 64,62 C 62,62 61,60 62,58 Z"/>
+                    </g>
+                    <text x="135" y="36" font-family="Courier New, monospace" font-weight="900" font-size="25" letter-spacing="3" fill="black">PERTAMINA</text>
+                </svg>`;
+
+                const blob = new Blob([combinedSvgString], { type: 'image/svg+xml;charset=utf-8' });
+                const URL = window.URL || window.webkitURL || window;
+                const blobURL = URL.createObjectURL(blob);
                 const img = new Image();
-                img.crossOrigin = "Anonymous";
+
                 img.onload = () => {
-                    // Hitung rasio aspek agar logo tidak gepeng
-                    const aspect = img.width / img.height;
-                    const drawHeight = targetHeight - 4;
-                    const drawWidth = drawHeight * aspect;
-                    
-                    // Posisi logo di kiri, teks di kanan
-                    const logoX = 60; // Posisi X logo
-                    const logoY = 2;
-                    
-                    ctx.drawImage(img, logoX, logoY, drawWidth, drawHeight);
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    URL.revokeObjectURL(blobURL);
 
-                    // Tambahkan Teks PERTAMINA di sebelah kanan logo
-                    ctx.fillStyle = "#000000";
-                    ctx.font = "bold 25px 'Courier New', monospace";
-                    ctx.textBaseline = "middle";
-                    ctx.letterSpacing = "3px"; // Jarak antar huruf
-                    ctx.fillText("PERTAMINA", logoX + drawWidth + 10, targetHeight / 2 + 2);
-
-                    // Konversi ke Bitmap ESC/POS
                     const imgData = ctx.getImageData(0, 0, targetWidth, targetHeight);
                     const pixels = imgData.data;
 
@@ -681,7 +706,6 @@
                                     const r = pixels[offset];
                                     const g = pixels[offset + 1];
                                     const b = pixels[offset + 2];
-                                    // Threshold: jika gelap, anggap hitam (1)
                                     const avg = (r + g + b) / 3;
                                     if (avg < 180) {
                                         byte |= (1 << (7 - bit));
@@ -705,7 +729,8 @@
 
                     resolve(escPosRaster);
                 };
-                img.src = LOGO_BASE64;
+
+                img.src = blobURL;
             });
         }
 
