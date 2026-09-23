@@ -96,39 +96,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <!-- LOGO SVG PRESISI (Tidak akan rusak) -->
-                    <svg class="w-full h-full fill-current text-red-500" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M 8,68 
-                                 L 32,20 
-                                 C 33,18 35,17 37,17 
-                                 L 52,17 
-                                 C 54,17 55,19 54,21 
-                                 L 36,55 
-                                 C 35,58 32,60 29,60 
-                                 L 8,60 
-                                 C 6,60 5,59 6,57 
-                                 Z"/>
-                        <path d="M 42,35 
-                                 L 52,15 
-                                 C 53,13 55,12 57,12 
-                                 L 72,12 
-                                 C 74,12 75,14 74,16 
-                                 L 64,36 
-                                 C 63,38 61,39 59,39 
-                                 L 44,39 
-                                 C 42,39 41,37 42,35 
-                                 Z"/>
-                        <path d="M 62,68 
-                                 L 78,36 
-                                 C 79,34 81,33 83,33 
-                                 L 92,33 
-                                 C 94,33 95,35 94,37 
-                                 L 84,57 
-                                 C 83,60 80,62 77,62 
-                                 L 64,62 
-                                 C 62,62 61,60 62,58 
-                                 Z"/>
-                    </svg>
+                    <!-- LOGO DARI URL GITHUB -->
+                    <img id="webLogo" src="" alt="Pertamina" class="w-full h-full object-contain" crossorigin="anonymous">
                 </div>
                 <div>
                     <h1 class="text-base font-bold text-white leading-tight flex items-center gap-2">
@@ -324,12 +293,8 @@
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- LOGO SVG PRESISI -->
-                                <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M 8,68 L 32,20 C 33,18 35,17 37,17 L 52,17 C 54,17 55,19 54,21 L 36,55 C 35,58 32,60 29,60 L 8,60 C 6,60 5,59 6,57 Z"/>
-                                    <path d="M 42,35 L 52,15 C 53,13 55,12 57,12 L 72,12 C 74,12 75,14 74,16 L 64,36 C 63,38 61,39 59,39 L 44,39 C 42,39 41,37 42,35 Z"/>
-                                    <path d="M 62,68 L 78,36 C 79,34 81,33 83,33 L 92,33 C 94,33 95,35 94,37 L 84,57 C 83,60 80,62 77,62 L 64,62 C 62,62 61,60 62,58 Z"/>
-                                </svg>
+                                <!-- LOGO DARI URL GITHUB -->
+                                <img id="receiptLogo" src="" alt="Pertamina" class="h-7 object-contain" crossorigin="anonymous">
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
 
@@ -413,6 +378,16 @@
 
     <!-- Script Logika & Interaktivitas -->
     <script>
+        // =================================================================
+        // MASUKKAN URL GITHUB ANDA DI SINI
+        // Contoh: "https://raw.githubusercontent.com/username/repo/main/logo.png"
+        // =================================================================
+        const LOGO_URL = "MASUKKAN_URL_GITHUB_ANDA_DI_SINI";
+
+        // Set gambar logo ke header web dan preview struk
+        document.getElementById('webLogo').src = LOGO_URL;
+        document.getElementById('receiptLogo').src = LOGO_URL;
+
         let isLiveClockActive = true;
         let clockInterval = null;
 
@@ -668,25 +643,29 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                // Path SVG logo asli dengan kurva lengkungan atas yang disesuaikan
-                const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
-                    <g transform="translate(60, 1) scale(0.65)">
-                        <path fill="black" d="M 8,68 L 32,20 C 33,18 35,17 37,17 L 52,17 C 54,17 55,19 54,21 L 36,55 C 35,58 32,60 29,60 L 8,60 C 6,60 5,59 6,57 Z"/>
-                        <path fill="black" d="M 42,35 L 52,15 C 53,13 55,12 57,12 L 72,12 C 74,12 75,14 74,16 L 64,36 C 63,38 61,39 59,39 L 44,39 C 42,39 41,37 42,35 Z"/>
-                        <path fill="black" d="M 62,68 L 78,36 C 79,34 81,33 83,33 L 92,33 C 94,33 95,35 94,37 L 84,57 C 83,60 80,62 77,62 L 64,62 C 62,62 61,60 62,58 Z"/>
-                    </g>
-                    <text x="135" y="36" font-family="Courier New, monospace" font-weight="900" font-size="25" letter-spacing="3" fill="black">PERTAMINA</text>
-                </svg>`;
-
-                const blob = new Blob([combinedSvgString], { type: 'image/svg+xml;charset=utf-8' });
-                const URL = window.URL || window.webkitURL || window;
-                const blobURL = URL.createObjectURL(blob);
+                // Menggunakan Gambar Base64 yang di-load dari elemen img
                 const img = new Image();
-
+                img.crossOrigin = "Anonymous";
                 img.onload = () => {
-                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-                    URL.revokeObjectURL(blobURL);
+                    // Hitung rasio aspek agar logo tidak gepeng
+                    const aspect = img.width / img.height;
+                    const drawHeight = targetHeight - 4;
+                    const drawWidth = drawHeight * aspect;
+                    
+                    // Posisi logo di kiri, teks di kanan
+                    const logoX = 60; // Posisi X logo
+                    const logoY = 2;
+                    
+                    ctx.drawImage(img, logoX, logoY, drawWidth, drawHeight);
 
+                    // Tambahkan Teks PERTAMINA di sebelah kanan logo
+                    ctx.fillStyle = "#000000";
+                    ctx.font = "bold 25px 'Courier New', monospace";
+                    ctx.textBaseline = "middle";
+                    ctx.letterSpacing = "3px"; // Jarak antar huruf
+                    ctx.fillText("PERTAMINA", logoX + drawWidth + 10, targetHeight / 2 + 2);
+
+                    // Konversi ke Bitmap ESC/POS
                     const imgData = ctx.getImageData(0, 0, targetWidth, targetHeight);
                     const pixels = imgData.data;
 
@@ -703,6 +682,7 @@
                                     const r = pixels[offset];
                                     const g = pixels[offset + 1];
                                     const b = pixels[offset + 2];
+                                    // Threshold: jika gelap, anggap hitam (1)
                                     const avg = (r + g + b) / 3;
                                     if (avg < 180) {
                                         byte |= (1 << (7 - bit));
@@ -726,8 +706,7 @@
 
                     resolve(escPosRaster);
                 };
-
-                img.src = blobURL;
+                img.src = LOGO_URL;
             });
         }
 
