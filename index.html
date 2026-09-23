@@ -637,6 +637,7 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
+                // Perbaikan: Path SVG disesuaikan persis seperti preview layar dengan threshold tebal pekat
                 const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
                     <svg x="66" y="1" width="64" height="50" viewBox="20 25 605 470">
                         <path fill="black" d="M343,30H488Q520,30 538,58L620,183H468Q438,183 422,158Z M385,225H620L548,340Q528,378 492,378H343Z M225,225H383L238,452Q214,487 172,487H25Z"/>
@@ -670,7 +671,8 @@
                                     const g = pixels[offset + 1];
                                     const b = pixels[offset + 2];
                                     const avg = (r + g + b) / 3;
-                                    if (avg < 128) {
+                                    // Peningkatan threshold dari 128 ke 180 agar cetakan tinta thermal lebih hitam pekat & solid
+                                    if (avg < 180) {
                                         byte |= (1 << (7 - bit));
                                     }
                                 }
