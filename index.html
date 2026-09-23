@@ -96,9 +96,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <!-- Ikon Logo Pertamina Akurat di Navbar -->
-                    <svg class="w-full h-full fill-current text-red-500" viewBox="20 25 605 470" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M343,30H488Q520,30 538,58L620,183H468Q438,183 422,158Z M385,225H620L548,340Q528,378 492,378H343Z M225,225H383L238,452Q214,487 172,487H25Z"/>
+                    <!-- Ikon Logo Pertamina dengan Lengkungan Akurat -->
+                    <svg class="w-full h-full fill-current text-red-500" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 5,65 L 28,15 L 53,15 Q 43,30 35,45 L 30,55 Z"/>
+                        <path d="M 33,65 Q 45,35 60,15 L 85,15 L 58,65 Z"/>
+                        <path d="M 63,65 L 88,38 Q 95,25 90,20 Q 80,20 63,38 Z"/>
                     </svg>
                 </div>
                 <div>
@@ -295,9 +297,11 @@
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- Ikon Logo Pertamina Baru yang Akurat -->
-                                <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="20 25 605 470" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M343,30H488Q520,30 538,58L620,183H468Q438,183 422,158Z M385,225H620L548,340Q528,378 492,378H343Z M225,225H383L238,452Q214,487 172,487H25Z"/>
+                                <!-- Ikon Logo Pertamina dengan Lengkungan Akurat -->
+                                <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 5,65 L 28,15 L 53,15 Q 43,30 35,45 L 30,55 Z"/>
+                                    <path d="M 33,65 Q 45,35 60,15 L 85,15 L 58,65 Z"/>
+                                    <path d="M 63,65 L 88,38 Q 95,25 90,20 Q 80,20 63,38 Z"/>
                                 </svg>
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
@@ -637,12 +641,14 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                // Perbaikan: Path SVG disesuaikan persis seperti preview layar dengan threshold tebal pekat
+                // Path SVG dengan kurva lengkung atas yang presisi sesuai referensi tanda merah
                 const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
-                    <svg x="66" y="1" width="64" height="50" viewBox="20 25 605 470">
-                        <path fill="black" d="M343,30H488Q520,30 538,58L620,183H468Q438,183 422,158Z M385,225H620L548,340Q528,378 492,378H343Z M225,225H383L238,452Q214,487 172,487H25Z"/>
-                    </svg>
-                    <text x="150" y="36" font-family="Courier New, monospace" font-weight="900" font-size="26" letter-spacing="3" fill="black">PERTAMINA</text>
+                    <g transform="translate(68, 1) scale(0.65)">
+                        <path fill="black" d="M 5,65 L 28,15 L 53,15 Q 43,30 35,45 L 30,55 Z"/>
+                        <path fill="black" d="M 33,65 Q 45,35 60,15 L 85,15 L 58,65 Z"/>
+                        <path fill="black" d="M 63,65 L 88,38 Q 95,25 90,20 Q 80,20 63,38 Z"/>
+                    </g>
+                    <text x="142" y="36" font-family="Courier New, monospace" font-weight="900" font-size="25" letter-spacing="3" fill="black">PERTAMINA</text>
                 </svg>`;
 
                 const blob = new Blob([combinedSvgString], { type: 'image/svg+xml;charset=utf-8' });
@@ -671,7 +677,6 @@
                                     const g = pixels[offset + 1];
                                     const b = pixels[offset + 2];
                                     const avg = (r + g + b) / 3;
-                                    // Peningkatan threshold dari 128 ke 180 agar cetakan tinta thermal lebih hitam pekat & solid
                                     if (avg < 180) {
                                         byte |= (1 << (7 - bit));
                                     }
@@ -866,3 +871,4 @@
     </script>
 </body>
 </html>
+
