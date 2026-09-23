@@ -292,17 +292,15 @@
                     <!-- KERTAS STRUK -->
                     <div id="print-section" class="thermal-paper receipt-font p-3 text-[11px] leading-snug select-none">
                         
-                        <!-- Header Logo & SPBU (Logo sejajar horizontal di sebelah kiri teks PERTAMINA) -->
+                        <!-- Header Logo & SPBU -->
                         <div class="text-center space-y-0.5 mb-1.5">
                             
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- Logo Presisi Sesuai Referensi -->
                                 <svg class="w-9 h-7 text-black fill-current shrink-0" viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
                                     <path d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
                                     <path d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
                                 </svg>
-                                <!-- Teks Pertamina Horizontal di Samping Kanan Logo -->
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
 
@@ -628,7 +626,6 @@
             gattServer = null;
         }
 
-        // FUNGSI GABUNGAN: RASTERISASI LOGO PRESISI & TEKS PERTAMINA SECARA HORIZONTAL DALAM SATU KANVAS BITMAP
         async function createHeaderBitmapCommands() {
             return new Promise((resolve) => {
                 const canvas = document.getElementById('logoCanvas');
@@ -639,19 +636,15 @@
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
 
-                // Background putih bersih
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                // SVG dengan bentuk logo yang sudah disesuaikan persis seperti referensi
                 const combinedSvgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${targetWidth}" height="${targetHeight}">
-                    <!-- Logo Icon Panah Presisi di sebelah kiri -->
                     <g transform="translate(95, 6) scale(0.35)">
                         <path fill="black" d="M 55 125 L 90 65 L 145 65 C 158 65 163 73 158 82 L 132 125 Z" />
                         <path fill="black" d="M 85 58 L 115 10 L 160 10 C 172 10 178 18 172 27 L 130 95 Z" />
                         <path fill="black" d="M 15 125 L 50 65 L 80 65 L 45 125 Z" />
                     </g>
-                    <!-- Teks PERTAMINA di sebelah kanan logo secara horizontal -->
                     <text x="165" y="36" font-family="Courier New, monospace" font-weight="900" font-size="28" letter-spacing="3" fill="black">PERTAMINA</text>
                 </svg>`;
 
@@ -738,11 +731,9 @@
             const push = (arr) => commands.push(...arr);
             const pushStr = (str) => commands.push(...encoder.encode(str));
 
-            // Init Printer
             push([0x1B, 0x40]);
 
-            // --- HEADER: CETAK LOGO PRESISI & TEKS PERTAMINA SEBAGAI SATU KANVAS RASTER HORIZONTAL ---
-            push([0x1B, 0x61, 0x01]); // Center alignment
+            push([0x1B, 0x61, 0x01]);
             const headerRaster = await createHeaderBitmapCommands();
             push(headerRaster);
             pushStr("\n");
@@ -757,7 +748,6 @@
             push([0x1B, 0x45, 0x00]);
             pushStr(`${alamatSpbu}\n`);
 
-            // Left alignment untuk detail transaksi
             push([0x1B, 0x61, 0x00]);
 
             const shift = document.getElementById('inputShift').value || '1';
@@ -807,10 +797,10 @@
             const customFooterText = document.getElementById('inputFooterText').value || '';
             const wrappedFooterLines = wrapTextToWidth(customFooterText, 32);
 
-            push([0x1B, 0x61, 0x01]); // Center
+            push([0x1B, 0x61, 0x01]);
             wrappedFooterLines.forEach(line => pushStr(line + "\n"));
 
-            push([0x1B, 0x64, 0x04]); // Feed & Cut
+            push([0x1B, 0x64, 0x04]);
 
             return new Uint8Array(commands);
         }
