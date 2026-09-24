@@ -199,15 +199,17 @@
                             <input type="text" id="inputPompa" value="1" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM</label>
-                            <select id="selectProduk" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500">
-                                <option value="PERTAMINA_DEX" data-harga="21150">PERTAMINA_DEX (Rp 21.150)</option>
-                                <option value="PERTALITE" data-harga="10000">PERTALITE (Rp 10.000)</option>
-                                <option value="PERTAMAX" data-harga="12950" selected>PERTAMAX (Rp 12.950)</option>
-                                <option value="PERTAMAX_TURBO" data-harga="14400">PERTAMAX_TURBO (Rp 14.400)</option>
-                                <option value="DEXLITE" data-harga="14550">DEXLITE (Rp 14.550)</option>
-                                <option value="SOLAR" data-harga="6800">SOLAR (Rp 6.800)</option>
-                            </select>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM (Bisa Diketik Manual)</label>
+                            <!-- Menggunakan input dengan datalist agar bisa diketik manual sekaligus ada saran -->
+                            <input type="text" id="inputProduk" list="produkList" value="PERTAMAX" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500" oninput="handleProdukChange()">
+                            <datalist id="produkList">
+                                <option value="PERTAMINA_DEX" data-harga="21150">
+                                <option value="PERTALITE" data-harga="10000">
+                                <option value="PERTAMAX" data-harga="12950">
+                                <option value="PERTAMAX_TURBO" data-harga="14400">
+                                <option value="DEXLITE" data-harga="14550">
+                                <option value="SOLAR" data-harga="6800">
+                            </datalist>
                         </div>
                     </div>
 
@@ -460,7 +462,7 @@
             updatePreview();
         }
 
-        // Fungsi baru: hitung volume berdasarkan harga yang diinput manual
+        // FUNGSI INI HANYA MENGHITUNG VOLUME DARI HARGA & TOTAL
         function hitungVolume() {
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             const total = parseFloat(document.getElementById('inputTotalBayar').value) || 0;
@@ -469,11 +471,32 @@
             }
         }
 
-        // Fungsi baru: hitung total berdasarkan volume yang diinput manual
+        // FUNGSI INI HANYA MENGHITUNG TOTAL DARI HARGA & VOLUME
         function hitungTotal() {
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             const vol = parseFloat(document.getElementById('inputVolume').value) || 0;
             document.getElementById('inputTotalBayar').value = Math.round(harga * vol);
+        }
+
+        // FUNGSI BARU: Menangani perubahan produk (baik diketik manual maupun dipilih dari datalist)
+        function handleProdukChange() {
+            const inputProduk = document.getElementById('inputProduk').value;
+            const datalist = document.getElementById('produkList');
+            const options = datalist.options;
+            
+            // Cek apakah produk yang diketik/dipilih ada di datalist
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === inputProduk) {
+                    // Jika ada, isi harga otomatis
+                    const harga = options[i].dataset.harga;
+                    if (harga) {
+                        document.getElementById('inputHarga').value = harga;
+                        hitungVolume(); // Hitung ulang volume
+                    }
+                    break;
+                }
+            }
+            updatePreview();
         }
 
         function tambahRowVoucher(code = '', amount = '') {
@@ -518,7 +541,7 @@
             document.getElementById('viewNoTrans').innerText = document.getElementById('inputNoTrans').value || '-';
             document.getElementById('viewWaktu').innerText = document.getElementById('inputWaktu').value || '-';
             document.getElementById('viewPompa').innerText = document.getElementById('inputPompa').value || '1';
-            document.getElementById('viewProduk').innerText = document.getElementById('selectProduk').value;
+            document.getElementById('viewProduk').innerText = document.getElementById('inputProduk').value || '-';
             document.getElementById('viewFooterText').innerText = document.getElementById('inputFooterText').value || '';
             document.getElementById('viewHarga').innerText = formatNumber(parseFloat(document.getElementById('inputHarga').value) || 0);
             document.getElementById('viewVolume').innerText = document.getElementById('inputVolume').value || '0';
@@ -770,7 +793,7 @@
             pushStr("--------------------------------\n");
 
             const pompa = document.getElementById('inputPompa').value || '1';
-            const produk = document.getElementById('selectProduk').value;
+            const produk = document.getElementById('inputProduk').value || '-';
             const harga = formatNumber(parseFloat(document.getElementById('inputHarga').value) || 0);
             const volume = document.getElementById('inputVolume').value || '0';
             const totalBayar = formatNumber(parseFloat(document.getElementById('inputTotalBayar').value) || 0);
@@ -855,30 +878,19 @@
         document.addEventListener('DOMContentLoaded', () => {
             startClock();
 
-            // Logika Dropdown Produk: Mengisi harga otomatis saat produk dipilih
-            document.getElementById('selectProduk').addEventListener('change', (e) => {
-                const harga = e.target.options[e.target.selectedIndex].dataset.harga;
-                if (harga) {
-                    document.getElementById('inputHarga').value = harga;
-                    hitungVolume(); // Hitung ulang volume berdasarkan harga baru
-                    updatePreview();
-                }
-            });
+            // Logika Input Harga (Manual)
+            document.getElementById('inputHarga').addEventListener('input', updatePreview);
 
-            // Logika Input Manual:
-            // 1. Jika Total Bayar diubah, hitung Volume otomatis
+            // Logika Input Total Bayar (Manual)
             document.getElementById('inputTotalBayar').addEventListener('input', () => { hitungVolume(); updatePreview(); });
             
-            // 2. Jika Volume diubah, hitung Total Bayar otomatis
+            // Logika Input Volume (Manual)
             document.getElementById('inputVolume').addEventListener('input', () => { hitungTotal(); updatePreview(); });
-            
-            // 3. Jika Harga diubah manual, hitung Volume otomatis
-            document.getElementById('inputHarga').addEventListener('input', () => { hitungVolume(); updatePreview(); });
 
             document.getElementById('inputFooterText').addEventListener('input', updatePreview);
             document.getElementById('inputWaktu').addEventListener('input', updatePreview);
 
-            ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputPompa', 'inputOperator'].forEach(id => {
+            ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputPompa', 'inputOperator', 'inputProduk'].forEach(id => {
                 document.getElementById(id).addEventListener('input', updatePreview);
             });
 
