@@ -460,6 +460,7 @@
             updatePreview();
         }
 
+        // Fungsi baru: hitung volume berdasarkan harga yang diinput manual
         function hitungVolume() {
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             const total = parseFloat(document.getElementById('inputTotalBayar').value) || 0;
@@ -468,6 +469,7 @@
             }
         }
 
+        // Fungsi baru: hitung total berdasarkan volume yang diinput manual
         function hitungTotal() {
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             const vol = parseFloat(document.getElementById('inputVolume').value) || 0;
@@ -853,18 +855,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             startClock();
 
+            // Logika Dropdown Produk: Mengisi harga otomatis saat produk dipilih
             document.getElementById('selectProduk').addEventListener('change', (e) => {
                 const harga = e.target.options[e.target.selectedIndex].dataset.harga;
                 if (harga) {
                     document.getElementById('inputHarga').value = harga;
-                    hitungVolume();
+                    hitungVolume(); // Hitung ulang volume berdasarkan harga baru
                     updatePreview();
                 }
             });
 
+            // Logika Input Manual:
+            // 1. Jika Total Bayar diubah, hitung Volume otomatis
             document.getElementById('inputTotalBayar').addEventListener('input', () => { hitungVolume(); updatePreview(); });
+            
+            // 2. Jika Volume diubah, hitung Total Bayar otomatis
             document.getElementById('inputVolume').addEventListener('input', () => { hitungTotal(); updatePreview(); });
+            
+            // 3. Jika Harga diubah manual, hitung Volume otomatis
             document.getElementById('inputHarga').addEventListener('input', () => { hitungVolume(); updatePreview(); });
+
             document.getElementById('inputFooterText').addEventListener('input', updatePreview);
             document.getElementById('inputWaktu').addEventListener('input', updatePreview);
 
