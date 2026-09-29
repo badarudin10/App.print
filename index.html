@@ -243,6 +243,12 @@
                         <label class="block text-xs font-medium text-slate-400 mb-1">Nama Operator</label>
                         <input type="text" id="inputOperator" value="BADARUDIN" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 uppercase focus:outline-none focus:border-red-500">
                     </div>
+
+                    <!-- KOLOM BARU: Plat Nomor Kendaraan -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Plat Nomor Kendaraan</label>
+                        <input type="text" id="inputPlat" value="" placeholder="Contoh: B 1234 XYZ" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 uppercase focus:outline-none focus:border-red-500">
+                    </div>
                 </div>
 
                 <!-- Section Footer Text -->
@@ -341,6 +347,11 @@
                             <div class="flex justify-between">
                                 <span>Operator</span>
                                 <span>: <span id="viewOperator">BADARUDIN</span></span>
+                            </div>
+                            <!-- BARIS BARU: Plat Nomor -->
+                            <div class="flex justify-between">
+                                <span>Plat Nomor</span>
+                                <span>: <span id="viewPlat">-</span></span>
                             </div>
                         </div>
 
@@ -547,6 +558,8 @@
             document.getElementById('viewVolume').innerText = document.getElementById('inputVolume').value || '0';
             document.getElementById('viewTotalBayar').innerText = formatNumber(parseFloat(document.getElementById('inputTotalBayar').value) || 0);
             document.getElementById('viewOperator').innerText = (document.getElementById('inputOperator').value || '-').toUpperCase();
+            // Menampilkan Plat Nomor di preview
+            document.getElementById('viewPlat').innerText = (document.getElementById('inputPlat').value || '-').toUpperCase();
 
             const voucherCodes = document.querySelectorAll('.voucher-code');
             const voucherAmounts = document.querySelectorAll('.voucher-amount');
@@ -798,6 +811,7 @@
             const volume = document.getElementById('inputVolume').value || '0';
             const totalBayar = formatNumber(parseFloat(document.getElementById('inputTotalBayar').value) || 0);
             const operator = (document.getElementById('inputOperator').value || '-').toUpperCase();
+            const plat = (document.getElementById('inputPlat').value || '-').toUpperCase();
 
             pushStr(formatEscPosRow("Pulau/Pompa", `: ${pompa}`));
             pushStr(formatEscPosRow("Nama Produk", `: ${produk}`));
@@ -809,6 +823,8 @@
             push([0x1B, 0x45, 0x00]);
 
             pushStr(formatEscPosRow("Operator", `: ${operator}`));
+            // Mencetak Plat Nomor
+            pushStr(formatEscPosRow("Plat Nomor", `: ${plat}`));
 
             const voucherCodes = document.querySelectorAll('.voucher-code');
             const voucherAmounts = document.querySelectorAll('.voucher-amount');
@@ -890,7 +906,7 @@
             document.getElementById('inputFooterText').addEventListener('input', updatePreview);
             document.getElementById('inputWaktu').addEventListener('input', updatePreview);
 
-            ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputPompa', 'inputOperator', 'inputProduk'].forEach(id => {
+            ['inputKodeSpbu', 'inputNamaSpbu', 'inputAlamatSpbu', 'inputShift', 'inputNoTrans', 'inputPompa', 'inputOperator', 'inputProduk', 'inputPlat'].forEach(id => {
                 document.getElementById(id).addEventListener('input', updatePreview);
             });
 
