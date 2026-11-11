@@ -71,6 +71,16 @@
             50% { opacity: 0.6; transform: scale(0.95); }
         }
 
+        /* Gaya khusus agar titik dua di preview selalu sejajar */
+        .receipt-row {
+            display: grid;
+            grid-template-columns: 100px 10px 1fr;
+            column-gap: 2px;
+        }
+        .receipt-row-right {
+            text-align: right;
+        }
+
         @media print {
             body * { visibility: hidden; }
             #print-section, #print-section * { visibility: visible; color: #000000 !important; }
@@ -96,7 +106,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 p-1.5 flex items-center justify-center text-white shadow-lg">
-                    <!-- LOGO DARI URL GITHUB -->
                     <img id="webLogo" src="" alt="Pertamina" class="w-full h-full object-contain" crossorigin="anonymous">
                 </div>
                 <div>
@@ -134,6 +143,7 @@
             
             <!-- FORM INPUT DATA -->
             <div class="lg:col-span-7 space-y-6 no-print">
+                <!-- ... (Bagian Form Input Data SPBU & Transaksi tetap sama seperti kode Anda) ... -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5 text-blue-400 font-semibold text-sm">
@@ -141,7 +151,6 @@
                             <span>Data SPBU & Sesi Operasional</span>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Kode SPBU</label>
@@ -152,12 +161,10 @@
                             <input type="text" id="inputNamaSpbu" value="SPBU BSD" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500">
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Alamat SPBU</label>
                         <input type="text" id="inputAlamatSpbu" value="Jl. Letjend Sutopo Kav 2 A" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500">
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Shift</label>
@@ -199,8 +206,7 @@
                             <input type="text" id="inputPompa" value="1" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM (Bisa Diketik Manual)</label>
-                            <!-- Menggunakan input dengan datalist agar bisa diketik manual sekaligus ada saran -->
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM</label>
                             <input type="text" id="inputProduk" list="produkList" value="PERTAMAX" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500" oninput="handleProdukChange()">
                             <datalist id="produkList">
                                 <option value="PERTAMINA_DEX" data-harga="21150">
@@ -244,7 +250,6 @@
                         <input type="text" id="inputOperator" value="BADARUDIN" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 uppercase focus:outline-none focus:border-red-500">
                     </div>
 
-                    <!-- KOLOM BARU: Plat Nomor Kendaraan -->
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Plat Nomor Kendaraan</label>
                         <input type="text" id="inputPlat" value="" placeholder="Contoh: B 1234 XYZ" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 uppercase focus:outline-none focus:border-red-500">
@@ -299,13 +304,10 @@
                         
                         <!-- Header Logo & SPBU -->
                         <div class="text-center space-y-0.5 mb-1.5">
-                            
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
-                                <!-- LOGO DARI URL GITHUB -->
                                 <img id="receiptLogo" src="" alt="Pertamina" class="h-7 object-contain" crossorigin="anonymous">
                                 <span class="receipt-font font-black text-[13px] tracking-wider leading-none uppercase">PERTAMINA</span>
                             </div>
-
                             <div class="font-bold text-[12px] tracking-tight" id="viewKodeSpbu">3115301</div>
                             <div class="font-bold uppercase text-[11px]" id="viewNamaSpbu">SPBU BSD</div>
                             <div class="text-[10px] px-1 leading-tight text-gray-800" id="viewAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
@@ -322,36 +324,28 @@
 
                         <div class="border-b border-dashed border-black my-1.5"></div>
 
-                        <!-- Detail Transaksi BBM -->
+                        <!-- Detail Transaksi BBM (Rapi dengan CSS Grid) -->
                         <div class="space-y-0.5 text-[10.5px]">
-                            <div class="flex justify-between">
-                                <span>Pulau/Pompa</span>
-                                <span>: <span id="viewPompa">1</span></span>
+                            <div class="receipt-row">
+                                <span>Pulau/Pompa</span><span>:</span><span class="receipt-row-right" id="viewPompa">1</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span>Nama Produk</span>
-                                <span>: <span id="viewProduk" class="font-bold">PERTAMAX</span></span>
+                            <div class="receipt-row">
+                                <span>Nama Produk</span><span>:</span><span class="receipt-row-right font-bold" id="viewProduk">PERTAMAX</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span>Harga/Liter</span>
-                                <span>: Rp. <span id="viewHarga">12,950</span></span>
+                            <div class="receipt-row">
+                                <span>Harga/Liter</span><span>:</span><span class="receipt-row-right">Rp. <span id="viewHarga">12,950</span></span>
                             </div>
-                            <div class="flex justify-between">
-                                <span>Volume</span>
-                                <span>: (L) <span id="viewVolume">15.44</span></span>
+                            <div class="receipt-row">
+                                <span>Volume</span><span>:</span><span class="receipt-row-right">(L) <span id="viewVolume">15.44</span></span>
                             </div>
-                            <div class="flex justify-between font-bold text-[11px]">
-                                <span>Total Harga</span>
-                                <span>: Rp. <span id="viewTotalBayar">200,000</span></span>
+                            <div class="receipt-row font-bold text-[11px]">
+                                <span>Total Harga</span><span>:</span><span class="receipt-row-right">Rp. <span id="viewTotalBayar">200,000</span></span>
                             </div>
-                            <div class="flex justify-between">
-                                <span>Operator</span>
-                                <span>: <span id="viewOperator">BADARUDIN</span></span>
+                            <div class="receipt-row">
+                                <span>Operator</span><span>:</span><span class="receipt-row-right" id="viewOperator">BADARUDIN</span>
                             </div>
-                            <!-- BARIS BARU: Plat Nomor -->
-                            <div class="flex justify-between">
-                                <span>Plat Nomor</span>
-                                <span>: <span id="viewPlat">-</span></span>
+                            <div class="receipt-row">
+                                <span>Plat Nomor</span><span>:</span><span class="receipt-row-right" id="viewPlat">-</span>
                             </div>
                         </div>
 
@@ -391,13 +385,8 @@
 
     <!-- Script Logika & Interaktivitas -->
     <script>
-        // =================================================================
-        // MASUKKAN URL GITHUB ANDA DI SINI
-        // Contoh: "https://raw.githubusercontent.com/username/repo/main/logo.png"
-        // =================================================================
         const LOGO_URL = "1000058195.png";
 
-        // Set gambar logo ke header web dan preview struk
         document.getElementById('webLogo').src = LOGO_URL;
         document.getElementById('receiptLogo').src = LOGO_URL;
 
@@ -473,7 +462,6 @@
             updatePreview();
         }
 
-        // FUNGSI INI HANYA MENGHITUNG VOLUME DARI HARGA & TOTAL
         function hitungVolume() {
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             const total = parseFloat(document.getElementById('inputTotalBayar').value) || 0;
@@ -482,27 +470,22 @@
             }
         }
 
-        // FUNGSI INI HANYA MENGHITUNG TOTAL DARI HARGA & VOLUME
         function hitungTotal() {
             const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
             const vol = parseFloat(document.getElementById('inputVolume').value) || 0;
             document.getElementById('inputTotalBayar').value = Math.round(harga * vol);
         }
 
-        // FUNGSI BARU: Menangani perubahan produk (baik diketik manual maupun dipilih dari datalist)
         function handleProdukChange() {
             const inputProduk = document.getElementById('inputProduk').value;
             const datalist = document.getElementById('produkList');
             const options = datalist.options;
-            
-            // Cek apakah produk yang diketik/dipilih ada di datalist
             for (let i = 0; i < options.length; i++) {
                 if (options[i].value === inputProduk) {
-                    // Jika ada, isi harga otomatis
                     const harga = options[i].dataset.harga;
                     if (harga) {
                         document.getElementById('inputHarga').value = harga;
-                        hitungVolume(); // Hitung ulang volume
+                        hitungVolume();
                     }
                     break;
                 }
@@ -558,7 +541,6 @@
             document.getElementById('viewVolume').innerText = document.getElementById('inputVolume').value || '0';
             document.getElementById('viewTotalBayar').innerText = formatNumber(parseFloat(document.getElementById('inputTotalBayar').value) || 0);
             document.getElementById('viewOperator').innerText = (document.getElementById('inputOperator').value || '-').toUpperCase();
-            // Menampilkan Plat Nomor di preview
             document.getElementById('viewPlat').innerText = (document.getElementById('inputPlat').value || '-').toUpperCase();
 
             const voucherCodes = document.querySelectorAll('.voucher-code');
@@ -681,29 +663,24 @@
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-                // Menggunakan Gambar Base64 yang di-load dari elemen img
                 const img = new Image();
                 img.crossOrigin = "Anonymous";
                 img.onload = () => {
-                    // Hitung rasio aspek agar logo tidak gepeng
                     const aspect = img.width / img.height;
                     const drawHeight = targetHeight - 4;
                     const drawWidth = drawHeight * aspect;
                     
-                    // Posisi logo di kiri, teks di kanan
-                    const logoX = 60; // Posisi X logo
+                    const logoX = 60;
                     const logoY = 2;
                     
                     ctx.drawImage(img, logoX, logoY, drawWidth, drawHeight);
 
-                    // Tambahkan Teks PERTAMINA di sebelah kanan logo
                     ctx.fillStyle = "#000000";
                     ctx.font = "bold 25px 'Courier New', monospace";
                     ctx.textBaseline = "middle";
-                    ctx.letterSpacing = "3px"; // Jarak antar huruf
+                    ctx.letterSpacing = "3px";
                     ctx.fillText("PERTAMINA", logoX + drawWidth + 10, targetHeight / 2 + 2);
 
-                    // Konversi ke Bitmap ESC/POS
                     const imgData = ctx.getImageData(0, 0, targetWidth, targetHeight);
                     const pixels = imgData.data;
 
@@ -720,7 +697,6 @@
                                     const r = pixels[offset];
                                     const g = pixels[offset + 1];
                                     const b = pixels[offset + 2];
-                                    // Threshold: jika gelap, anggap hitam (1)
                                     const avg = (r + g + b) / 3;
                                     if (avg < 180) {
                                         byte |= (1 << (7 - bit));
@@ -748,12 +724,21 @@
             });
         }
 
-        function formatEscPosRow(left, right, maxLen = 32) {
-            left = String(left);
-            right = String(right);
-            const totalSpaces = maxLen - left.length - right.length;
-            if (totalSpaces < 1) return left + ' ' + right + '\n';
-            return left + ' '.repeat(totalSpaces) + right + '\n';
+        // FUNGSI INI DIPERBAIKI: Menggunakan standard ESC/POS Alignment agar titik dua sejajar sempurna
+        function generateEscPosRow(left, right, isBold = false) {
+            const encoder = new TextEncoder();
+            let commands = [];
+            
+            if (isBold) commands.push(...[0x1B, 0x45, 0x01]); // ESC E 1 (Bold ON)
+            
+            commands.push(...encoder.encode(left));
+            commands.push(...[0x1B, 0x61, 0x02]); // ESC a 2 (Align Right)
+            commands.push(...encoder.encode(right + '\n'));
+            commands.push(...[0x1B, 0x61, 0x00]); // ESC a 0 (Align Left)
+            
+            if (isBold) commands.push(...[0x1B, 0x45, 0x00]); // ESC E 0 (Bold OFF)
+            
+            return commands;
         }
 
         function wrapTextToWidth(text, maxLen = 32) {
@@ -778,9 +763,9 @@
             const push = (arr) => commands.push(...arr);
             const pushStr = (str) => commands.push(...encoder.encode(str));
 
-            push([0x1B, 0x40]);
+            push([0x1B, 0x40]); // Init printer
 
-            push([0x1B, 0x61, 0x01]);
+            push([0x1B, 0x61, 0x01]); // Align Center
             const headerRaster = await createHeaderBitmapCommands();
             push(headerRaster);
             pushStr("\n");
@@ -790,18 +775,19 @@
             const alamatSpbu = document.getElementById('inputAlamatSpbu').value || '-';
 
             pushStr(`${kodeSpbu}\n`);
-            push([0x1B, 0x45, 0x01]);
+            push([0x1B, 0x45, 0x01]); // Bold ON
             pushStr(`${namaSpbu.toUpperCase()}\n`);
-            push([0x1B, 0x45, 0x00]);
+            push([0x1B, 0x45, 0x00]); // Bold OFF
             pushStr(`${alamatSpbu}\n`);
 
-            push([0x1B, 0x61, 0x00]);
+            push([0x1B, 0x61, 0x00]); // Align Left
 
             const shift = document.getElementById('inputShift').value || '1';
             const noTrans = document.getElementById('inputNoTrans').value || '-';
             const waktu = document.getElementById('inputWaktu').value || '-';
 
-            pushStr(formatEscPosRow(`Shift: ${shift}`, `No. Trans: ${noTrans}`));
+            // Menggunakan fungsi baru generateEscPosRow
+            push(generateEscPosRow(`Shift: ${shift}`, `No. Trans: ${noTrans}`));
             pushStr(`Waktu: ${waktu}\n`);
             pushStr("--------------------------------\n");
 
@@ -813,18 +799,15 @@
             const operator = (document.getElementById('inputOperator').value || '-').toUpperCase();
             const plat = (document.getElementById('inputPlat').value || '-').toUpperCase();
 
-            pushStr(formatEscPosRow("Pulau/Pompa", `: ${pompa}`));
-            pushStr(formatEscPosRow("Nama Produk", `: ${produk}`));
-            pushStr(formatEscPosRow("Harga/Liter", `: Rp. ${harga}`));
-            pushStr(formatEscPosRow("Volume", `: (L) ${volume}`));
+            push(generateEscPosRow("Pulau/Pompa", `: ${pompa}`));
+            push(generateEscPosRow("Nama Produk", `: ${produk}`));
+            push(generateEscPosRow("Harga/Liter", `: Rp. ${harga}`));
+            push(generateEscPosRow("Volume", `: (L) ${volume}`));
 
-            push([0x1B, 0x45, 0x01]);
-            pushStr(formatEscPosRow("Total Harga", `: Rp. ${totalBayar}`));
-            push([0x1B, 0x45, 0x00]);
+            push(generateEscPosRow("Total Harga", `: Rp. ${totalBayar}`, true));
 
-            pushStr(formatEscPosRow("Operator", `: ${operator}`));
-            // Mencetak Plat Nomor
-            pushStr(formatEscPosRow("Plat Nomor", `: ${plat}`));
+            push(generateEscPosRow("Operator", `: ${operator}`));
+            push(generateEscPosRow("Plat Nomor", `: ${plat}`));
 
             const voucherCodes = document.querySelectorAll('.voucher-code');
             const voucherAmounts = document.querySelectorAll('.voucher-amount');
@@ -838,7 +821,7 @@
                         pushStr("--------------------------------\n");
                         hasVoucher = true;
                     }
-                    pushStr(formatEscPosRow(code.toUpperCase(), amt));
+                    push(generateEscPosRow(code.toUpperCase(), amt));
                 }
             });
 
@@ -847,10 +830,10 @@
             const customFooterText = document.getElementById('inputFooterText').value || '';
             const wrappedFooterLines = wrapTextToWidth(customFooterText, 32);
 
-            push([0x1B, 0x61, 0x01]);
+            push([0x1B, 0x61, 0x01]); // Align Center
             wrappedFooterLines.forEach(line => pushStr(line + "\n"));
 
-            push([0x1B, 0x64, 0x04]);
+            push([0x1B, 0x64, 0x04]); // Feed 4 lines
 
             return new Uint8Array(commands);
         }
@@ -894,15 +877,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             startClock();
 
-            // Logika Input Harga (Manual)
             document.getElementById('inputHarga').addEventListener('input', updatePreview);
-
-            // Logika Input Total Bayar (Manual)
             document.getElementById('inputTotalBayar').addEventListener('input', () => { hitungVolume(); updatePreview(); });
-            
-            // Logika Input Volume (Manual)
             document.getElementById('inputVolume').addEventListener('input', () => { hitungTotal(); updatePreview(); });
-
             document.getElementById('inputFooterText').addEventListener('input', updatePreview);
             document.getElementById('inputWaktu').addEventListener('input', updatePreview);
 
