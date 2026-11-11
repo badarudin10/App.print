@@ -71,18 +71,22 @@
             50% { opacity: 0.6; transform: scale(0.95); }
         }
 
-        /* CSS Khusus Preview agar titik dua sejajar lurus */
-        .receipt-table {
-            width: 100%;
-            border-collapse: collapse;
+        /* CSS Preview Struk yang super rapi */
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1px;
         }
-        .receipt-table td {
-            padding: 0;
-            vertical-align: top;
+        .preview-label {
+            text-align: left;
         }
-        .col-label { width: 40%; text-align: left; }
-        .col-colon { width: 5%; text-align: center; }
-        .col-value { width: 55%; text-align: left; }
+        .preview-colon {
+            margin: 0 4px;
+        }
+        .preview-value {
+            text-align: right;
+            flex-grow: 1;
+        }
 
         @media print {
             body * { visibility: hidden; }
@@ -144,7 +148,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            <!-- FORM INPUT DATA -->
+            <!-- FORM INPUT DATA (Sama seperti sebelumnya) -->
             <div class="lg:col-span-7 space-y-6 no-print">
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -196,7 +200,6 @@
                     </div>
                 </div>
 
-                <!-- Section Transaksi BBM -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5 text-red-500 font-semibold text-sm">
@@ -211,10 +214,10 @@
                             <input type="text" id="inputPompa" value="1" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM (Bisa Diketik Manual)</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Jenis Produk BBM</label>
                             <input type="text" id="inputProduk" list="produkList" value="PERTAMAX" class="w-full text-sm bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:border-red-500" oninput="handleProdukChange()">
                             <datalist id="produkList">
-                                <option value="PERTAMINA_DEX" data-harga="25200">
+                                <option value="PERTAMINA_DEX" data-harga="21150">
                                 <option value="PERTALITE" data-harga="10000">
                                 <option value="PERTAMAX" data-harga="12950">
                                 <option value="PERTAMAX_TURBO" data-harga="14400">
@@ -261,7 +264,6 @@
                     </div>
                 </div>
 
-                <!-- Section Footer Text -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5 text-amber-400 font-semibold text-sm">
@@ -274,7 +276,6 @@
                     </div>
                 </div>
 
-                <!-- Section Voucher -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5 text-amber-400 font-semibold text-sm">
@@ -307,7 +308,7 @@
                     <!-- KERTAS STRUK -->
                     <div id="print-section" class="thermal-paper receipt-font p-3 text-[11px] leading-snug select-none">
                         
-                        <!-- Header Logo & SPBU -->
+                        <!-- Header -->
                         <div class="text-center space-y-0.5 mb-1.5">
                             <div class="flex items-center justify-center gap-2 pt-1 pb-1">
                                 <img id="receiptLogo" src="" alt="Pertamina" class="h-7 object-contain" crossorigin="anonymous">
@@ -318,7 +319,7 @@
                             <div class="text-[10px] px-1 leading-tight text-gray-800" id="viewAlamatSpbu">Jl. Letjend Sutopo Kav 2 A</div>
                         </div>
 
-                        <!-- Meta Info Sesi -->
+                        <!-- Meta -->
                         <div class="space-y-0.5 text-[10.5px] pt-1">
                             <div class="flex justify-between">
                                 <span>Shift: <span id="viewShift">1</span></span>
@@ -329,46 +330,39 @@
 
                         <div class="border-b border-dashed border-black my-1.5"></div>
 
-                        <!-- Detail Transaksi BBM (TABEL RAPI) -->
-                        <table class="receipt-table text-[10.5px]">
-                            <tr>
-                                <td class="col-label">Pulau/Pompa</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value" id="viewPompa">1</td>
-                            </tr>
-                            <tr>
-                                <td class="col-label">Nama Produk</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value font-bold" id="viewProduk">PERTAMAX</td>
-                            </tr>
-                            <tr>
-                                <td class="col-label">Harga/Liter</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value">Rp. <span id="viewHarga">12,950</span></td>
-                            </tr>
-                            <tr>
-                                <td class="col-label">Volume</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value">(L) <span id="viewVolume">15.44</span></td>
-                            </tr>
-                            <tr class="font-bold text-[11px]">
-                                <td class="col-label">Total Harga</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value">Rp. <span id="viewTotalBayar">200,000</span></td>
-                            </tr>
-                            <tr>
-                                <td class="col-label">Operator</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value" id="viewOperator">BADARUDIN</td>
-                            </tr>
-                            <tr>
-                                <td class="col-label">Plat Nomor</td>
-                                <td class="col-colon">:</td>
-                                <td class="col-value" id="viewPlat">-</td>
-                            </tr>
-                        </table>
+                        <!-- Detail Transaksi (Format Presisi) -->
+                        <div class="space-y-0.5 text-[10.5px]">
+                            <div class="preview-row">
+                                <span class="preview-label">Pulau/Pompa</span>
+                                <span class="preview-value"><span id="viewPompa">1</span></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Nama Produk</span>
+                                <span class="preview-value font-bold"><span id="viewProduk">PERTAMAX</span></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Harga/Liter</span>
+                                <span class="preview-value">Rp. <span id="viewHarga">12,950</span></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Volume</span>
+                                <span class="preview-value">(L) <span id="viewVolume">15.44</span></span>
+                            </div>
+                            <div class="preview-row font-bold text-[11px]">
+                                <span class="preview-label">Total Harga</span>
+                                <span class="preview-value">Rp. <span id="viewTotalBayar">200,000</span></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Operator</span>
+                                <span class="preview-value"><span id="viewOperator">BADARUDIN</span></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Plat Nomor</span>
+                                <span class="preview-value"><span id="viewPlat">-</span></span>
+                            </div>
+                        </div>
 
-                        <!-- Container Dynamic Voucher -->
+                        <!-- Voucher -->
                         <div id="viewVoucherWrapper">
                             <div class="border-b border-dashed border-black my-1.5"></div>
                             <div id="viewVoucherList" class="space-y-0.5 text-[10.5px]"></div>
@@ -376,7 +370,7 @@
 
                         <div class="border-b border-dashed border-black my-1.5"></div>
 
-                        <!-- Footer Catatan Struk -->
+                        <!-- Footer -->
                         <div class="text-center text-[9.5px] space-y-0.5 leading-tight px-0.5 pt-0.5">
                             <p id="viewFooterText">Terima Kasih telah menggunakan produk Pertamax, Gunakan MyPertamina untuk menikmati berbagai promo dan program menarik lainnya.</p>
                         </div>
@@ -399,19 +393,15 @@
         </div>
     </main>
 
-    <!-- Canvas Tersembunyi untuk Rasterisasi Logo & Teks Pertamina Horizontal -->
     <canvas id="logoCanvas" style="display:none;"></canvas>
 
-    <!-- Script Logika & Interaktivitas -->
     <script>
         const LOGO_URL = "1000058195.png";
-
         document.getElementById('webLogo').src = LOGO_URL;
         document.getElementById('receiptLogo').src = LOGO_URL;
 
         let isLiveClockActive = true;
         let clockInterval = null;
-
         let bluetoothDevice = null;
         let gattServer = null;
         let printCharacteristic = null;
@@ -576,8 +566,8 @@
                 if (code !== '' || amt > 0) {
                     countVoucher++;
                     const itemDiv = document.createElement('div');
-                    itemDiv.className = 'flex justify-between items-center';
-                    itemDiv.innerHTML = `<span>VOUCHER ${code.toUpperCase()}</span><span>${formatNumber(amt)}</span>`;
+                    itemDiv.className = 'preview-row';
+                    itemDiv.innerHTML = `<span class="preview-label">VOUCHER ${code.toUpperCase()}</span><span class="preview-value">${formatNumber(amt)}</span>`;
                     voucherList.appendChild(itemDiv);
                 }
             });
@@ -743,23 +733,23 @@
             });
         }
 
-        // FUNGSI BARU: Format teks Kiri dan Kanan secara manual agar selalu rapi
-        function padLine(leftText, rightText, maxLen = 32) {
-            leftText = String(leftText).trim();
-            rightText = String(rightText).trim();
-            
-            // Kurangi 1 karakter untuk spasi pemisah minimal
-            const availableSpace = maxLen - rightText.length - 1;
-            
-            // Potong teks kiri jika terlalu panjang
-            if (leftText.length > availableSpace) {
-                leftText = leftText.substring(0, availableSpace);
+        // =========================================================================
+        // FUNGSI BARU: Memastikan Kiri (Label) dan Kanan (Nilai) Sejajar Sempurna
+        // =========================================================================
+        function formatLine(leftText, rightText, maxChar = 32) {
+            leftText = String(leftText);
+            rightText = String(rightText);
+
+            // Hitung spasi yang dibutuhkan di antara teks kiri dan kanan
+            let spacesNeeded = maxChar - leftText.length - rightText.length;
+
+            // Jika teks terlalu panjang (melebihi 32 karakter), potong agar tidak berantakan
+            if (spacesNeeded < 1) {
+                // Kita paksa teks kanan ke ujung dengan memberi 1 spasi minimal
+                return leftText.substring(0, maxChar - rightText.length - 1) + " " + rightText + "\n";
             }
-            
-            const spaces = maxLen - leftText.length - rightText.length;
-            const pad = ' '.repeat(spaces > 0 ? spaces : 1);
-            
-            return leftText + pad + rightText + '\n';
+
+            return leftText + " ".repeat(spacesNeeded) + rightText + "\n";
         }
 
         function wrapTextToWidth(text, maxLen = 32) {
@@ -784,9 +774,9 @@
             const push = (arr) => commands.push(...arr);
             const pushStr = (str) => commands.push(...encoder.encode(str));
 
-            push([0x1B, 0x40]); // Init printer
+            push([0x1B, 0x40]); // Init
 
-            push([0x1B, 0x61, 0x01]); // Align Center
+            push([0x1B, 0x61, 0x01]); // Center
             const headerRaster = await createHeaderBitmapCommands();
             push(headerRaster);
             pushStr("\n");
@@ -796,18 +786,19 @@
             const alamatSpbu = document.getElementById('inputAlamatSpbu').value || '-';
 
             pushStr(`${kodeSpbu}\n`);
-            push([0x1B, 0x45, 0x01]); // Bold ON
+            push([0x1B, 0x45, 0x01]);
             pushStr(`${namaSpbu.toUpperCase()}\n`);
-            push([0x1B, 0x45, 0x00]); // Bold OFF
+            push([0x1B, 0x45, 0x00]);
             pushStr(`${alamatSpbu}\n`);
 
-            push([0x1B, 0x61, 0x00]); // Align Left
+            push([0x1B, 0x61, 0x00]); // Left Align
 
             const shift = document.getElementById('inputShift').value || '1';
             const noTrans = document.getElementById('inputNoTrans').value || '-';
             const waktu = document.getElementById('inputWaktu').value || '-';
 
-            pushStr(padLine(`Shift: ${shift}`, `No. Trans: ${noTrans}`));
+            // MENGGUNAKAN formatLine BARU
+            pushStr(formatLine(`Shift: ${shift}`, `No. Trans: ${noTrans}`));
             pushStr(`Waktu: ${waktu}\n`);
             pushStr("--------------------------------\n");
 
@@ -819,18 +810,18 @@
             const operator = (document.getElementById('inputOperator').value || '-').toUpperCase();
             const plat = (document.getElementById('inputPlat').value || '-').toUpperCase();
 
-            // Menggunakan format "Label      : Nilai" dan di-padLine agar rapi
-            pushStr(padLine("Pulau/Pompa", `: ${pompa}`));
-            pushStr(padLine("Nama Produk", `: ${produk}`));
-            pushStr(padLine("Harga/Liter", `: Rp. ${harga}`));
-            pushStr(padLine("Volume", `: (L) ${volume}`));
+            // Format Label dan Nilai (Titik dua otomatis masuk ke teks kanan)
+            pushStr(formatLine("Pulau/Pompa", `: ${pompa}`));
+            pushStr(formatLine("Nama Produk", `: ${produk}`));
+            pushStr(formatLine("Harga/Liter", `: Rp. ${harga}`));
+            pushStr(formatLine("Volume", `: (L) ${volume}`));
 
-            push([0x1B, 0x45, 0x01]); // Bold ON
-            pushStr(padLine("Total Harga", `: Rp. ${totalBayar}`));
-            push([0x1B, 0x45, 0x00]); // Bold OFF
+            push([0x1B, 0x45, 0x01]); // Bold Total
+            pushStr(formatLine("Total Harga", `: Rp. ${totalBayar}`));
+            push([0x1B, 0x45, 0x00]);
 
-            pushStr(padLine("Operator", `: ${operator}`));
-            pushStr(padLine("Plat Nomor", `: ${plat}`));
+            pushStr(formatLine("Operator", `: ${operator}`));
+            pushStr(formatLine("Plat Nomor", `: ${plat}`));
 
             const voucherCodes = document.querySelectorAll('.voucher-code');
             const voucherAmounts = document.querySelectorAll('.voucher-amount');
@@ -844,8 +835,8 @@
                         pushStr("--------------------------------\n");
                         hasVoucher = true;
                     }
-                    // Format voucher seperti di gambar kedua: VOUCHER KODE [TAB] NOMINAL
-                    pushStr(padLine(`VOUCHER ${code.toUpperCase()}`, amt));
+                    // Voucher diposisikan Rata Kiri dan Kanan murni
+                    pushStr(formatLine(`VOUCHER ${code.toUpperCase()}`, amt));
                 }
             });
 
@@ -854,10 +845,10 @@
             const customFooterText = document.getElementById('inputFooterText').value || '';
             const wrappedFooterLines = wrapTextToWidth(customFooterText, 32);
 
-            push([0x1B, 0x61, 0x01]); // Align Center
+            push([0x1B, 0x61, 0x01]); // Center Footer
             wrappedFooterLines.forEach(line => pushStr(line + "\n"));
 
-            push([0x1B, 0x64, 0x04]); // Feed 4 lines
+            push([0x1B, 0x64, 0x04]); // Feed lines
 
             return new Uint8Array(commands);
         }
